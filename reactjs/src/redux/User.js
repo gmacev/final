@@ -1,57 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const userSlice = createSlice({
-    name: "playerData",
+    name: "userData",
     initialState: {
         value: {
-            //user object
+            _id: "",
+            email: "",
         },
     },
     reducers: {
-        /*updatePlayerCharacter: (state, action) => {
-            state.value.character = action.payload;
+        setUserEmail: (state, action) => {
+            state.value.email = action.payload;
         },
 
-        updatePlayerWeapons: (state, action) => {
-            state.value.weapons = action.payload;
+        setUserId: (state, action) => {
+            state.value.email = action.payload;
         },
-
-        updatePlayerPotions: (state, action) => {
-            state.value.potions = action.payload;
-        },
-
-        updatePlayerItems: (state, action) => {
-            state.value.items = action.payload;
-        },
-
-        updateFreeSlots: (state, action) => {
-            state.value.freeSlots = action.payload;
-        },
-
-        updatePlayerGold: (state, action) => {
-            state.value.gold = action.payload;
-        },
-
-        updateBuyDisabled: (state, action) => {
-            state.value.buyDisabled = action.payload;
-        },
-
-        updateGameState: (state, action) => {
-            state.value.gameState = action.payload;
-        },*/
     },
 });
 
-// export methods to update state
-export const {
-    /*updatePlayerCharacter,
-    updatePlayerWeapons,
-    updatePlayerPotions,
-    updatePlayerItems,
-    updateBuyDisabled,
-    updatePlayerGold,
-    updateFreeSlots,
-    updateGameState,*/
-} = userSlice.actions;
+export const { setUserEmail, setUserId } = userSlice.actions;
 
 export default userSlice.reducer;

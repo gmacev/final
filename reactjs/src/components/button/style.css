@@ -1,0 +1,13 @@
+.button {
+    padding: 10px;
+    background-color: #ffd803;
+    color: #3f3f3f;
+    border: unset;
+    transition: all 200ms ease-in;
+    font-size: 18px;
+}
+
+.button:hover {
+    background-color: rgba(255, 216, 3, 0.6);
+    backdrop-filter: blur(3px);
+}

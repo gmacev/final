@@ -1,7 +1,12 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import LoginPage from "./pages/LoginPage";
+
 import io from "socket.io-client";
 const socket = io.connect(process.env.REACT_APP_SOCKETS_SERVER);
+
+console.log(process.env.REACT_APP_SOCKETS_SERVER);
 
 function App() {
     return (
@@ -9,8 +14,8 @@ function App() {
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <Routes>
                     <Route
-                        path={"/"}
-                        element={"fgasgffsa"}
+                        path={"/login"}
+                        element={<LoginPage />}
                     />
                 </Routes>
             </BrowserRouter>
