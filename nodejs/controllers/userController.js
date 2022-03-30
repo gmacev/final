@@ -6,54 +6,51 @@ const userModel = require("../models/userSchema");
 module.exports = {
     registerUser: async (req, res) => {
         try {
-            const { username, password1 } = req.body;
+            const { email, password1 } = req.body;
 
             const user = new userModel();
             const hash = await bcrypt.hash(password1, 10);
 
-            user.username = username;
+            user.email = email;
             user.password = hash;
 
             const response = await user.save();
 
             return res.send({
                 error: false,
-                data:
-                    response && response.username === user.username
-                        ? "User registered successfully"
-                        : response,
+                message: "User registered successfully",
             });
         } catch (error) {
-            return res.send({ error: true, data: error });
+            console.log(error);
+            return res.send({ error: true, message: error });
         }
     },
 
     login: async (req, res) => {
         try {
-            const { username } = req.body;
+            const { email } = req.body;
 
-            const response = await userModel.find({ username: username });
+            const response = await userModel.find({ email: email });
 
-            req.session.username = response[0].username;
+            req.session.email = response[0].email;
 
             return res.send({
                 error: false,
-                data: "Login successful",
+                message: "Login successful",
                 _id: response[0]._id,
-                username: response[0].username,
-                money: response[0].money,
+                email: response[0].email,
             });
         } catch (error) {
-            return res.send({ error: true, data: error });
+            return res.send({ error: true, message: error });
         }
     },
 
     logout: async (req, res) => {
-        if (req.session.username) {
+        if (req.session.email) {
             req.session.destroy();
-            return res.send({ error: false, data: "Logged out" });
+            return res.send({ error: false, message: "Logged out" });
         }
 
-        return res.send({ error: true, data: "Not logged in" });
+        return res.send({ error: true, message: "Not logged in" });
     },
 };

@@ -8,10 +8,10 @@ module.exports = {
         const response = await userModel.find({ email: email });
 
         if (response[0])
-            return res.send({ error: false, data: "User already exists" });
+            return res.send({ error: false, message: "User already exists" });
 
         if (password1 !== password2)
-            return res.send({ error: true, data: "Passwords do not match" });
+            return res.send({ error: true, message: "Passwords do not match" });
 
         if (password1.length < 5 || password1.length > 50) {
             return res.send({
