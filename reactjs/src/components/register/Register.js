@@ -41,55 +41,57 @@ const RegisterUserComp = () => {
     }
 
     return (
-        <div className="box d-flex flex-column align-items-center">
-            <div
-                className="d-flex flex-column justify-content-center"
-                style={{ width: "250px" }}
-            >
-                <h2 className="text-center">Register user</h2>
-                <input
-                    ref={emailRef}
-                    type="email"
-                    className={`mt-3 ${getInRequest && "disabled"}`}
-                    placeholder="Email"
-                />
-                <input
-                    ref={password1Ref}
-                    type="password"
-                    className={`mt-3 ${getInRequest && "disabled"}`}
-                    placeholder="Password"
-                />
-                <input
-                    ref={password2Ref}
-                    type="password"
-                    className={`mt-3 ${getInRequest && "disabled"}`}
-                    placeholder="Repeat password"
-                />
-
-                <Button
-                    onClick={() => registerUser()}
-                    className={`mt-3 ${getInRequest && "disabled"}`}
+        <div className="main">
+            <div className="box d-flex flex-column align-items-center">
+                <div
+                    className="d-flex flex-column justify-content-center"
+                    style={{ width: "250px" }}
                 >
-                    Register
-                </Button>
-            </div>
-            <div>
-                {getResponse && getResponse.length > 0 && (
-                    <div
-                        className="alert alert-light mt-3"
-                        role="alert"
-                    >
-                        {getResponse}
-                    </div>
-                )}
+                    <h2 className="text-center">Register user</h2>
+                    <input
+                        ref={emailRef}
+                        type="email"
+                        className={`mt-3 ${getInRequest && "disabled"}`}
+                        placeholder="Email"
+                    />
+                    <input
+                        ref={password1Ref}
+                        type="password"
+                        className={`mt-3 ${getInRequest && "disabled"}`}
+                        placeholder="Password"
+                    />
+                    <input
+                        ref={password2Ref}
+                        type="password"
+                        className={`mt-3 ${getInRequest && "disabled"}`}
+                        placeholder="Repeat password"
+                    />
 
-                <div className="mt-2 text-center">
-                    <Link
-                        to={"/login"}
-                        className="small text-black-50"
+                    <Button
+                        onClick={() => registerUser()}
+                        className={`mt-3 ${getInRequest && "disabled"}`}
                     >
-                        Login
-                    </Link>
+                        Register
+                    </Button>
+                </div>
+                <div>
+                    {getResponse && getResponse.length > 0 && (
+                        <div
+                            className="alert alert-light mt-3"
+                            role="alert"
+                        >
+                            {getResponse}
+                        </div>
+                    )}
+
+                    <div className="mt-2 text-center">
+                        <Link
+                            to={"/login"}
+                            className="small text-black-50"
+                        >
+                            Login
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

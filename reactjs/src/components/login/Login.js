@@ -46,49 +46,51 @@ const Login = () => {
     }
 
     return (
-        <div className="box d-flex flex-column align-items-center">
-            <div
-                className="d-flex flex-column justify-content-center"
-                style={{ width: "250px" }}
-            >
-                <h2 className="text-center">Login</h2>
-                <input
-                    ref={emailRef}
-                    type="text"
-                    className={`mt-3 ${getInRequest && "disabled"}`}
-                    placeholder="Email"
-                />
-                <input
-                    ref={passwordRef}
-                    type="password"
-                    className={`mt-3 ${getInRequest && "disabled"}`}
-                    placeholder="Password"
-                />
-
-                <Button
-                    onClick={() => loginUser()}
-                    className={`mt-3 ${getInRequest && "disabled"}`}
+        <div className="main">
+            <div className="box d-flex flex-column align-items-center">
+                <div
+                    className="d-flex flex-column justify-content-center"
+                    style={{ width: "250px" }}
                 >
-                    Login
-                </Button>
-            </div>
-            <div>
-                {getResponse && getResponse.length > 0 && (
-                    <div
-                        className="alert alert-light mt-3"
-                        role="alert"
-                    >
-                        {getResponse}
-                    </div>
-                )}
+                    <h2 className="text-center">Login</h2>
+                    <input
+                        ref={emailRef}
+                        type="text"
+                        className={`mt-3 ${getInRequest && "disabled"}`}
+                        placeholder="Email"
+                    />
+                    <input
+                        ref={passwordRef}
+                        type="password"
+                        className={`mt-3 ${getInRequest && "disabled"}`}
+                        placeholder="Password"
+                    />
 
-                <div className="mt-2 text-center">
-                    <Link
-                        to={"/register"}
-                        className="small text-black-50"
+                    <Button
+                        onClick={() => loginUser()}
+                        className={`mt-3 ${getInRequest && "disabled"}`}
                     >
-                        Register
-                    </Link>
+                        Login
+                    </Button>
+                </div>
+                <div>
+                    {getResponse && getResponse.length > 0 && (
+                        <div
+                            className="alert alert-light mt-3"
+                            role="alert"
+                        >
+                            {getResponse}
+                        </div>
+                    )}
+
+                    <div className="mt-2 text-center">
+                        <Link
+                            to={"/register"}
+                            className="small text-black-50"
+                        >
+                            Register
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

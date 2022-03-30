@@ -57,7 +57,8 @@ a:hover {
     color: #00528a !important;
 }
 
-.box {
+.box,
+.toolbar {
     box-shadow: rgb(12 22 44 / 70%) 0 12px 32px -12px;
 }
 
@@ -66,6 +67,14 @@ a:hover {
     width: 100%;
     background-color: rgba(255, 255, 254, 0.5);
     backdrop-filter: blur(4px);
+}
+
+.wrapper {
+}
+
+.main {
+    margin: 130px 50px 50px 50px;
+    width: calc(100% - 100px);
 }
 
 .alert-light {
