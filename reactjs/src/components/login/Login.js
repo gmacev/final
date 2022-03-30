@@ -1,5 +1,5 @@
 import { useRef, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import http from "../../plugins/http";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserEmail, setUserId } from "../../redux/User";
@@ -46,12 +46,12 @@ const Login = () => {
     }
 
     return (
-        <div className="w-100 d-flex flex-column align-items-center">
+        <div className="box d-flex flex-column align-items-center">
             <div
                 className="d-flex flex-column justify-content-center"
                 style={{ width: "250px" }}
             >
-                <h4 className="text-center">Login</h4>
+                <h2 className="text-center">Login</h2>
                 <input
                     ref={emailRef}
                     type="text"
@@ -73,7 +73,7 @@ const Login = () => {
                 </Button>
             </div>
             <div>
-                {getResponse.length > 0 && (
+                {getResponse && getResponse.length > 0 && (
                     <div
                         className="alert alert-light mt-3"
                         role="alert"
@@ -82,13 +82,14 @@ const Login = () => {
                     </div>
                 )}
 
-                <p
-                    className="mt-3 small text-black-50 text-center"
-                    onClick={() => navigate("/register")}
-                    style={{ cursor: "pointer" }}
-                >
-                    Register
-                </p>
+                <div className="mt-2 text-center">
+                    <Link
+                        to={"/register"}
+                        className="small text-black-50"
+                    >
+                        Register
+                    </Link>
+                </div>
             </div>
         </div>
     );
