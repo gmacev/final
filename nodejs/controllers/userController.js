@@ -11,10 +11,10 @@ module.exports = {
             const user = new userModel();
             const hash = await bcrypt.hash(password1, 10);
 
-            user.email = email;
+            user.email = email.toLowerCase();
             user.password = hash;
 
-            const response = await user.save();
+            await user.save();
 
             return res.send({
                 error: false,
@@ -30,15 +30,18 @@ module.exports = {
         try {
             const { email } = req.body;
 
-            const response = await userModel.find({ email: email });
+            const response = await userModel.findOne({
+                email: email.toLowerCase(),
+            });
 
-            req.session.email = response[0].email;
+            req.session.email = response[0].email.toLowerCase();
 
             return res.send({
                 error: false,
                 message: "Login successful",
-                _id: response[0]._id,
-                email: response[0].email,
+                _id: response._id,
+                email: response.email,
+                username: response.username,
             });
         } catch (error) {
             return res.send({ error: true, message: error });

@@ -3,12 +3,22 @@ const userModel = require("../models/userSchema");
 
 module.exports = {
     validateUserRegister: async (req, res, next) => {
-        const { email, password1, password2 } = req.body;
+        const { email, username, password1, password2 } = req.body;
 
-        const response = await userModel.find({ email: email });
+        let response = await userModel.findOne({ email: email.toLowerCase() });
 
-        if (response[0])
+        if (response)
             return res.send({ error: false, message: "User already exists" });
+
+        response = await userModel.findOne({
+            username: username.toLowerCase(),
+        });
+
+        if (response)
+            return res.send({
+                error: false,
+                message: "This username is already taken",
+            });
 
         if (password1 !== password2)
             return res.send({ error: true, message: "Passwords do not match" });
