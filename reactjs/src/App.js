@@ -4,9 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import Toolbar from "./components/toolbar/Toolbar";
+import HomePage from "./pages/HomePage";
 
 import io from "socket.io-client";
-import Home from "./components/home/Home";
 const socket = io.connect(process.env.REACT_APP_SOCKETS_SERVER);
 
 console.log(process.env.REACT_APP_SOCKETS_SERVER);
@@ -17,6 +17,10 @@ function App() {
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <Toolbar />
                 <Routes>
+                    <Route
+                        path={"/"}
+                        element={<HomePage />}
+                    />
                     <Route
                         path={"/login"}
                         element={<LoginPage />}

@@ -1,6 +1,6 @@
 .toolbar {
     width: 100%;
-    background-color: rgba(255, 255, 254, 0.7);
+    background-color: #00528a;
     backdrop-filter: blur(4px);
     position: fixed;
     left: 0;
@@ -11,15 +11,14 @@
     display: flex;
     justify-content: space-evenly;
 }
-
-.toolbar a {
-    color: #00528a;
+.toolbar p {
+    user-select: none;
 }
 
-.toolbar div,
+.toolbar div:not(.search-item),
 .toolbar a {
     cursor: pointer;
-    color: #00528a;
+    color: white;
     width: 80px;
     height: 80px;
     display: flex;
@@ -31,7 +30,7 @@
 .toolbar div:hover svg,
 .toolbar a:hover svg {
     transform: scale(1.2);
-    color: #007ece;
+    color: #2ee3ff;
 }
 
 .toolbar svg {
@@ -40,10 +39,50 @@
 }
 .toolbar p {
     margin: 0;
+    color: white;
 }
 
 .toolbar-active-item {
-    background-color: #b9e6f8;
+    background-color: #00375c;
+}
+
+.search-nav {
+    position: relative;
+}
+
+.search-item {
+    position: fixed;
+    height: 0;
+    top: 62px;
+    left: 0;
+}
+
+.search-item button {
+    border-radius: unset;
+    height: 44px;
+    background-color: #00375c;
+    box-shadow: unset;
+    padding: 10px;
+    font-size: 18px;
+}
+
+.search-item button:hover {
+    background-color: #00243c;
+}
+
+.search-input {
+    border-radius: unset;
+    color: white;
+    background-color: #00243c;
+    width: 100%;
+}
+
+.search-input:focus {
+    border: unset;
+    outline: unset;
+}
+
+.search-inputs {
 }
 
 @media only screen and (max-width: 500px) {
@@ -56,12 +95,11 @@
         z-index: 1;
         top: 0;
         left: 0;
-        overflow-x: hidden;
 
         box-shadow: rgb(12 22 44 / 70%) 12px 1px 25px -12px;
     }
 
-    .toolbar div,
+    .toolbar div:not(.search-item, .search-inputs),
     .toolbar a {
         width: 100%;
         height: 100%;
@@ -75,12 +113,39 @@
     .toolbar p {
         font-size: 14px;
     }
+
+    .search-nav {
+    }
+
+    .search-item {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .search-item button {
+    }
+
+    .search-input {
+        margin-left: 60px;
+    }
 }
 
 @media only screen and (max-width: 350px) {
     .toolbar {
         width: 50px;
         box-shadow: rgb(12 22 44 / 70%) 12px 1px 14px -12px;
+    }
+    .search-item {
+    }
+
+    .search-item button {
+        padding: 5px;
+        font-size: 14px;
+    }
+
+    .search-input {
+        margin-left: 50px;
     }
 
     .toolbar svg {

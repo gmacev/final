@@ -1,5 +1,5 @@
 import { useRef, useState, useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import http from "../../plugins/http";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserId, setUserEmail, setUserName } from "../../redux/User";
@@ -16,10 +16,13 @@ const Login = () => {
     const [getInRequest, setInRequest] = useState(false);
 
     const navigate = useNavigate();
+    const { state } = useLocation();
 
     async function login() {
         setInRequest(true);
         setResponse("");
+
+        emailRef.current.value = emailRef.current.value.trim();
 
         http.post(
             {
@@ -33,7 +36,7 @@ const Login = () => {
                     setInRequest(false);
                     setResponse(res.message);
                 } else {
-                    setInRequest(false);
+                    setResponse(res.message);
                     dispatch(setUserId(res._id));
                     dispatch(setUserEmail(res.email));
                     dispatch(setUserName(res.username));
@@ -56,12 +59,15 @@ const Login = () => {
                         type="text"
                         className={`mt-3 ${getInRequest && "disabled"}`}
                         placeholder="Email"
+                        name="email"
+                        defaultValue={state && state.email}
                     />
                     <input
                         ref={passwordRef}
                         type="password"
                         className={`mt-3 ${getInRequest && "disabled"}`}
                         placeholder="Password"
+                        name="password"
                     />
 
                     <Button

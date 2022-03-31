@@ -6,6 +6,7 @@ import Button from "../button/Button";
 
 const RegisterUserComp = () => {
     const emailRef = useRef();
+    const usernameRef = useRef();
     const password1Ref = useRef();
     const password2Ref = useRef();
     const navigate = useNavigate();
@@ -17,11 +18,15 @@ const RegisterUserComp = () => {
         setInRequest(true);
         setResponse("");
 
+        emailRef.current.value = emailRef.current.value.trim();
+        usernameRef.current.value = usernameRef.current.value.trim();
+
         http.post(
             {
                 email: emailRef.current.value,
+                username: usernameRef.current.value,
                 password1: password1Ref.current.value,
-                password2: password1Ref.current.value,
+                password2: password2Ref.current.value,
             },
             "register-user"
         )
@@ -30,8 +35,10 @@ const RegisterUserComp = () => {
                     setInRequest(false);
                     setResponse(res.message);
                 } else {
-                    setInRequest(false);
                     setResponse(res.message);
+                    navigate("/login", {
+                        state: { email: emailRef.current.value },
+                    });
                 }
             })
             .catch((err) => {
@@ -45,6 +52,12 @@ const RegisterUserComp = () => {
             <div className="box d-flex flex-column align-items-center">
                 <div className="d-flex flex-column justify-content-center">
                     <h2 className="text-center">Register user</h2>
+                    <input
+                        ref={usernameRef}
+                        type="text"
+                        className={`mt-3 ${getInRequest && "disabled"}`}
+                        placeholder="Display name"
+                    />
                     <input
                         ref={emailRef}
                         type="email"

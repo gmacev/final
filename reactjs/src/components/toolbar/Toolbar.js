@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
 import {
     HiHome,
@@ -8,24 +8,68 @@ import {
     HiUserAdd,
     HiSearch,
 } from "react-icons/hi";
-import { useSelector } from "react-redux";
-import userData, { setUserEmail, setUserId } from "../../redux/User";
-import { Link, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { resetUserState } from "../../redux/User";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Button from "../button/Button";
 
 const Toolbar = () => {
-    let userState = useSelector((state) => state.user.value);
     const { email } = useSelector((state) => state.user.value);
+    const [getShowSearchField, setShowSearchField] = useState(false);
+    const [getPrevSearchInputField, setPrevSearchInputField] = useState("");
+    const searchInputRef = useRef();
 
+    const dispatch = useDispatch();
     const { pathname } = useLocation();
+    const navigate = useNavigate();
 
-    console.log(email);
+    useEffect(() => {
+        window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("click", handleClick);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
 
     function logOut() {
-        console.log(userState);
-        userState = {
-            ...userState,
-            user: state.user.items.filter((i) => i.email !== email),
-        };
+        setShowSearchField(false);
+        dispatch(resetUserState());
+        navigate("/login");
+    }
+
+    function handleKeyDown(e) {
+        if (e.key === "Escape") {
+            setShowSearchField(false);
+        }
+    }
+
+    function handleClick(e) {
+        if (
+            e.target &&
+            e.target.className !== null &&
+            e.target.className !== "search-input" &&
+            e.target.className !== "search-nav" &&
+            e.target.parentNode &&
+            e.target.parentNode.className !== null &&
+            e.target.parentNode.className !== "search-nav" &&
+            e.target.parentElement &&
+            e.target.parentElement.parentElement &&
+            e.target.parentElement.parentElement.className !== null &&
+            e.target.parentElement.parentElement.className !== "search-nav"
+        ) {
+            setShowSearchField(false);
+        }
+    }
+
+    function handleSearchField(e) {
+        if (e.target.className !== "search-input")
+            setShowSearchField(!getShowSearchField);
+    }
+
+    function search() {
+        setPrevSearchInputField(searchInputRef.current.value);
+        console.log(searchInputRef.current.value);
     }
 
     return (
@@ -44,9 +88,31 @@ const Toolbar = () => {
                 <HiUsers />
                 <p>Users</p>
             </Link>
-            <div>
+            <div
+                className="search-nav"
+                onClick={handleSearchField}
+            >
                 <HiSearch />
                 <p>Search</p>
+                <div className="search-item">
+                    {getShowSearchField && (
+                        <div className="search-inputs d-flex flex-row vw-100">
+                            <input
+                                autoFocus
+                                type="text"
+                                className="search-input"
+                                ref={searchInputRef}
+                                defaultValue={getPrevSearchInputField}
+                            />
+                            <Button
+                                onClick={search}
+                                className="d-inline-block"
+                            >
+                                Search
+                            </Button>
+                        </div>
+                    )}
+                </div>
             </div>
             {!email ? (
                 <>
