@@ -3,21 +3,30 @@ const userModel = require("../models/userSchema");
 
 module.exports = {
     validateUserRegister: async (req, res, next) => {
-        const { email, username, password1, password2 } = req.body;
+        let { email, username, password1, password2 } = req.body;
 
-        let response = await userModel.findOne({ email: email.toLowerCase() });
+        email = email.toLowerCase();
+        username = username.toLowerCase();
+
+        let response = await userModel.findOne({ email: email });
 
         if (response)
-            return res.send({ error: false, message: "User already exists" });
+            return res.send({ error: true, message: "User already exists" });
+
+        if (username.length > 32)
+            return res.send({
+                error: true,
+                message: "Display name can't be longer than 32 characters",
+            });
 
         response = await userModel.findOne({
-            username: username.toLowerCase(),
+            username: username,
         });
 
         if (response)
             return res.send({
-                error: false,
-                message: "This username is already taken",
+                error: true,
+                message: "This display name is already taken",
             });
 
         if (password1 !== password2)
@@ -52,7 +61,7 @@ module.exports = {
         } else {
             return res.send({
                 error: true,
-                message: "User with this email not found",
+                message: "User with this email was not found",
             });
         }
 
@@ -79,17 +88,17 @@ module.exports = {
 
         if (!email) {
             return res.send({
-                success: false,
-                message: "Vartotojas neprisijungęs",
+                error: true,
+                message: "User is not logged in",
             });
         }
 
-        const user = await userSchema.findOne({ email: email.toLowerCase() });
+        const user = await userModel.findOne({ email: email.toLowerCase() });
 
         if (!user) {
             return res.send({
-                success: false,
-                message: "Vartotojas neegzistuoja",
+                error: false,
+                message: "User doesn't exist",
             });
         }
 

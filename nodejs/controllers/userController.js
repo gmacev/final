@@ -6,12 +6,13 @@ const userModel = require("../models/userSchema");
 module.exports = {
     registerUser: async (req, res) => {
         try {
-            const { email, password1 } = req.body;
+            const { email, username, password1 } = req.body;
 
             const user = new userModel();
             const hash = await bcrypt.hash(password1, 10);
 
             user.email = email.toLowerCase();
+            user.username = username;
             user.password = hash;
 
             await user.save();
@@ -34,11 +35,11 @@ module.exports = {
                 email: email.toLowerCase(),
             });
 
-            req.session.email = response[0].email.toLowerCase();
+            req.session.email = response.email.toLowerCase();
 
             return res.send({
                 error: false,
-                message: "Login successful",
+                message: "Logged in successfully",
                 _id: response._id,
                 email: response.email,
                 username: response.username,
