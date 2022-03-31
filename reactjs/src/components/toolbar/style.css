@@ -1,25 +1,37 @@
 .toolbar {
     width: 100%;
-    background-color: rgba(255, 255, 254, 0.5);
+    background-color: rgba(255, 255, 254, 0.7);
     backdrop-filter: blur(4px);
     position: fixed;
     left: 0;
     right: 0;
     top: 0;
+    z-index: 1;
 
     display: flex;
     justify-content: space-evenly;
 }
 
-.toolbar div {
+.toolbar a {
+    color: #00528a;
+}
+
+.toolbar div,
+.toolbar a {
     cursor: pointer;
     color: #00528a;
     width: 80px;
     height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.toolbar div:hover svg {
+.toolbar div:hover svg,
+.toolbar a:hover svg {
     transform: scale(1.2);
+    color: #007ece;
 }
 
 .toolbar svg {
@@ -28,4 +40,54 @@
 }
 .toolbar p {
     margin: 0;
+}
+
+.toolbar-active-item {
+    background-color: #b9e6f8;
+}
+
+@media only screen and (max-width: 500px) {
+    .toolbar {
+        flex-direction: column;
+
+        height: 100%;
+        width: 60px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        overflow-x: hidden;
+
+        box-shadow: rgb(12 22 44 / 70%) 12px 1px 25px -12px;
+    }
+
+    .toolbar div,
+    .toolbar a {
+        width: 100%;
+        height: 100%;
+        border-bottom: 1px solid #a8cde7;
+    }
+
+    .toolbar svg {
+        font-size: 30px;
+    }
+
+    .toolbar p {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+    .toolbar {
+        width: 50px;
+        box-shadow: rgb(12 22 44 / 70%) 12px 1px 14px -12px;
+    }
+
+    .toolbar svg {
+        font-size: 25px;
+    }
+
+    .toolbar p {
+        font-size: 12px;
+    }
 }

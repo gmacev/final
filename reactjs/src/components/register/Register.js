@@ -43,10 +43,7 @@ const RegisterUserComp = () => {
     return (
         <div className="main">
             <div className="box d-flex flex-column align-items-center">
-                <div
-                    className="d-flex flex-column justify-content-center"
-                    style={{ width: "250px" }}
-                >
+                <div className="d-flex flex-column justify-content-center">
                     <h2 className="text-center">Register user</h2>
                     <input
                         ref={emailRef}

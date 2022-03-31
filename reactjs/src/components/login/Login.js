@@ -2,7 +2,7 @@ import { useRef, useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import http from "../../plugins/http";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserEmail, setUserId } from "../../redux/User";
+import { setUserId, setUserEmail, setUserName } from "../../redux/User";
 import Button from "../button/Button";
 
 const Login = () => {
@@ -17,7 +17,7 @@ const Login = () => {
 
     const navigate = useNavigate();
 
-    async function loginUser() {
+    async function login() {
         setInRequest(true);
         setResponse("");
 
@@ -36,6 +36,7 @@ const Login = () => {
                     setInRequest(false);
                     dispatch(setUserId(res._id));
                     dispatch(setUserEmail(res.email));
+                    dispatch(setUserName(res.username));
                     navigate("/");
                 }
             })
@@ -48,10 +49,7 @@ const Login = () => {
     return (
         <div className="main">
             <div className="box d-flex flex-column align-items-center">
-                <div
-                    className="d-flex flex-column justify-content-center"
-                    style={{ width: "250px" }}
-                >
+                <div className="d-flex flex-column justify-content-center">
                     <h2 className="text-center">Login</h2>
                     <input
                         ref={emailRef}
@@ -67,7 +65,7 @@ const Login = () => {
                     />
 
                     <Button
-                        onClick={() => loginUser()}
+                        onClick={login}
                         className={`mt-3 ${getInRequest && "disabled"}`}
                     >
                         Login

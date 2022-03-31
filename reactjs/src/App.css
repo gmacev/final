@@ -29,6 +29,7 @@ h6 {
 
 input {
     padding: 10px;
+    width: 300px;
 }
 
 input:focus {
@@ -63,7 +64,7 @@ a:hover {
 }
 
 .box {
-    padding: 25px;
+    padding: 35px;
     width: 100%;
     background-color: rgba(255, 255, 254, 0.5);
     backdrop-filter: blur(4px);
@@ -74,10 +75,37 @@ a:hover {
 
 .main {
     margin: 130px 50px 50px 50px;
-    width: calc(100% - 100px);
 }
 
 .alert-light {
     background-color: unset !important;
     border: unset !important;
+}
+
+@media only screen and (max-width: 500px) {
+    .main {
+        margin: 15px 15px 15px 80px;
+        width: calc(100% - 115px);
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    input {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+    .main {
+        margin: 15px 5px 15px 55px;
+        width: calc(100% - 80px);
+    }
+
+    .box {
+        padding: 20px;
+    }
 }
