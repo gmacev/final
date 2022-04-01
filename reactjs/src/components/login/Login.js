@@ -69,7 +69,7 @@ const Login = () => {
 
     return (
         <div
-            className="main w-auto"
+            className="main login"
             style={{ opacity: `${getOpacity}` }}
         >
             <div className="box d-flex flex-column align-items-center">

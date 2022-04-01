@@ -124,10 +124,6 @@
         width: 100%;
     }
 
-    .search-item button {
-        margin-right: 10px;
-    }
-
     .search-input {
         margin-left: 60px;
     }
@@ -138,11 +134,9 @@
         width: 50px;
         box-shadow: rgb(12 22 44 / 70%) 12px 1px 14px -12px;
     }
-    .search-item {
-    }
 
     .search-item button {
-        padding: 5px;
+        padding: 5px 15px 5px 5px;
         font-size: 14px;
     }
 

@@ -100,6 +100,11 @@ a {
     max-width: 1200px;
 }
 
+.login,
+.register {
+    width: auto;
+}
+
 p {
     margin-bottom: 2px !important;
 }
@@ -134,10 +139,6 @@ p {
 @media only screen and (max-width: 500px) {
     .main {
         margin: 15px 15px 15px 80px;
-        position: absolute;
-        top: 50%;
-        -ms-transform: translateY(-50%);
-        transform: translateY(-50%);
     }
 }
 
@@ -145,12 +146,24 @@ p {
     input {
         width: 100%;
     }
+
+    .main,
+    .login,
+    .register {
+        width: auto;
+    }
+     {
+        margin: 15px 0 15px 60px;
+        width: calc(100% - 85px) !important;
+    }
 }
 
 @media only screen and (max-width: 350px) {
-    .main {
-        margin: 15px 5px 15px 55px;
-        width: calc(100% - 80px);
+    .main,
+    .login,
+    .register {
+        margin: 15px 0 15px 50px;
+        width: calc(100% - 75px) !important;
     }
 
     .box {

@@ -7,6 +7,7 @@ export const userSlice = createSlice({
             _id: "",
             email: "",
             username: "",
+            avatar: "",
             registeredTimeStamp: 0,
             postCount: 0,
         },
@@ -20,12 +21,17 @@ export const userSlice = createSlice({
             state.value.username = action.payload;
         },
 
+        setUserAvatar: (state, action) => {
+            state.value.avatar = action.payload;
+        },
+
         resetUserState: (state, action) => {
             state.value.email = userSlice.getInitialState().value.email;
         },
     },
 });
 
-export const { setUser, setUserName, resetUserState } = userSlice.actions;
+export const { setUser, setUserName, setUserAvatar, resetUserState } =
+    userSlice.actions;
 
 export default userSlice.reducer;
