@@ -7,6 +7,7 @@ import {
     HiLogout,
     HiUserAdd,
     HiSearch,
+    HiUserCircle,
 } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { resetUserState } from "../../redux/User";
@@ -14,7 +15,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../button/Button";
 
 const Toolbar = () => {
-    const { email } = useSelector((state) => state.user.value);
+    const { email, _id } = useSelector((state) => state.user.value);
+
     const [getShowSearchField, setShowSearchField] = useState(false);
     const [getPrevSearchInputField, setPrevSearchInputField] = useState("");
     const searchInputRef = useRef();
@@ -40,24 +42,31 @@ const Toolbar = () => {
 
     function handleKeyDown(e) {
         if (e.key === "Escape") {
+            setPrevSearchInputField(searchInputRef.current.value);
             setShowSearchField(false);
         }
     }
 
     function handleClick(e) {
         if (
-            e.target &&
-            e.target.className !== null &&
-            e.target.className !== "search-input" &&
-            e.target.className !== "search-nav" &&
-            e.target.parentNode &&
-            e.target.parentNode.className !== null &&
-            e.target.parentNode.className !== "search-nav" &&
-            e.target.parentElement &&
-            e.target.parentElement.parentElement &&
-            e.target.parentElement.parentElement.className !== null &&
-            e.target.parentElement.parentElement.className !== "search-nav"
+            (e.target &&
+                e.target.className !== null &&
+                e.target.className !== "search-input" &&
+                e.target.className !== "search-nav" &&
+                e.target.parentNode &&
+                e.target.parentNode.className !== null &&
+                e.target.parentNode.className !== "search-nav" &&
+                e.target.parentElement &&
+                e.target.parentElement.parentElement &&
+                e.target.parentElement.parentElement.className !== null &&
+                e.target.parentElement.parentElement.className !==
+                    "search-nav") ||
+            e.target.localName === "html"
         ) {
+            if (searchInputRef.current) {
+                setPrevSearchInputField(searchInputRef.current.value);
+            }
+
             setShowSearchField(false);
         }
     }
@@ -68,8 +77,9 @@ const Toolbar = () => {
     }
 
     function search() {
-        setPrevSearchInputField(searchInputRef.current.value);
-        console.log(searchInputRef.current.value);
+        if (searchInputRef.current) {
+            setPrevSearchInputField(searchInputRef.current.value);
+        }
     }
 
     return (
@@ -82,7 +92,7 @@ const Toolbar = () => {
                 <p>Index</p>
             </Link>
             <Link
-                to={"/users"}
+                to={"/users/1"}
                 className={`${pathname === "/users" && "toolbar-active-item"}`}
             >
                 <HiUsers />
@@ -136,10 +146,16 @@ const Toolbar = () => {
                     </Link>
                 </>
             ) : (
-                <div onClick={logOut}>
-                    <HiLogout />
-                    <p>Logout</p>
-                </div>
+                <>
+                    <Link to={`/profile/${_id}`}>
+                        <HiUserCircle />
+                        <p>Profile</p>
+                    </Link>
+                    <div onClick={logOut}>
+                        <HiLogout />
+                        <p>Logout</p>
+                    </div>
+                </>
             )}
         </div>
     );

@@ -7,16 +7,13 @@ export const userSlice = createSlice({
             _id: "",
             email: "",
             username: "",
+            registeredTimeStamp: 0,
+            postCount: 0,
         },
     },
     reducers: {
-        setUserId: (state, action) => {
-            state.value.email = action.payload;
-            console.log("fsagas");
-        },
-
-        setUserEmail: (state, action) => {
-            state.value.email = action.payload;
+        setUser: (state, action) => {
+            state.value = action.payload;
         },
 
         setUserName: (state, action) => {
@@ -29,7 +26,6 @@ export const userSlice = createSlice({
     },
 });
 
-export const { setUserId, setUserEmail, setUserName, resetUserState } =
-    userSlice.actions;
+export const { setUser, setUserName, resetUserState } = userSlice.actions;
 
 export default userSlice.reducer;

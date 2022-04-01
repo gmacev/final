@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import http from "../../plugins/http";
 import { setUserEmail, setUserId } from "../../redux/User";
@@ -13,6 +13,17 @@ const RegisterUserComp = () => {
 
     const [getResponse, setResponse] = useState("");
     const [getInRequest, setInRequest] = useState(false);
+    let [getOpacity, setOpacity] = useState(0);
+
+    useEffect(() => {
+        const timeOut = setTimeout(() => {
+            setOpacity(1);
+        }, 100);
+
+        return () => {
+            clearTimeout(timeOut);
+        };
+    }, []);
 
     async function registerUser() {
         setInRequest(true);
@@ -48,32 +59,63 @@ const RegisterUserComp = () => {
     }
 
     return (
-        <div className="main">
+        <div
+            className="main w-auto"
+            style={{ opacity: `${getOpacity}` }}
+        >
             <div className="box d-flex flex-column align-items-center">
                 <div className="d-flex flex-column justify-content-center">
                     <h2 className="text-center">Register user</h2>
+                    <label
+                        htmlFor="display-name"
+                        className="mt-3"
+                    >
+                        Display name:
+                    </label>
                     <input
+                        id="display-name"
                         ref={usernameRef}
                         type="text"
-                        className={`mt-3 ${getInRequest && "disabled"}`}
+                        className={`${getInRequest && "disabled"}`}
                         placeholder="Display name"
                     />
+                    <label
+                        htmlFor="email"
+                        className="mt-3"
+                    >
+                        Email:
+                    </label>
                     <input
+                        id="email"
                         ref={emailRef}
                         type="email"
-                        className={`mt-3 ${getInRequest && "disabled"}`}
+                        className={`${getInRequest && "disabled"}`}
                         placeholder="Email"
                     />
+                    <label
+                        htmlFor="password"
+                        className="mt-3"
+                    >
+                        Password:
+                    </label>
                     <input
+                        id="password"
                         ref={password1Ref}
                         type="password"
-                        className={`mt-3 ${getInRequest && "disabled"}`}
+                        className={`${getInRequest && "disabled"}`}
                         placeholder="Password"
                     />
+                    <label
+                        htmlFor="repeat-password"
+                        className="mt-3"
+                    >
+                        Repeat password:
+                    </label>
                     <input
+                        id="repeat-password"
                         ref={password2Ref}
                         type="password"
-                        className={`mt-3 ${getInRequest && "disabled"}`}
+                        className={`${getInRequest && "disabled"}`}
                         placeholder="Repeat password"
                     />
 
@@ -97,7 +139,7 @@ const RegisterUserComp = () => {
                     <div className="mt-2 text-center">
                         <Link
                             to={"/login"}
-                            className="small text-black-50"
+                            className="small"
                         >
                             Login
                         </Link>

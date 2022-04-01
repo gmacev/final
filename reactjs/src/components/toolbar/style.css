@@ -30,7 +30,7 @@
 .toolbar div:hover svg,
 .toolbar a:hover svg {
     transform: scale(1.2);
-    color: #2ee3ff;
+    color: #5fc4ff;
 }
 
 .toolbar svg {
@@ -54,6 +54,7 @@
     position: fixed;
     height: 0;
     top: 62px;
+    right: 0;
     left: 0;
 }
 
@@ -62,7 +63,7 @@
     height: 44px;
     background-color: #00375c;
     box-shadow: unset;
-    padding: 10px;
+    padding: 0 20px;
     font-size: 18px;
 }
 
@@ -124,6 +125,7 @@
     }
 
     .search-item button {
+        margin-right: 10px;
     }
 
     .search-input {

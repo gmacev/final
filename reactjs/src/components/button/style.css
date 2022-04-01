@@ -7,6 +7,5 @@
 }
 
 .button:hover {
-    background-color: rgba(60, 191, 245, 0.75);
-    backdrop-filter: blur(3px);
+    background-color: #00243c;
 }

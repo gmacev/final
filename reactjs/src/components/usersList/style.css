@@ -1,0 +1,39 @@
+.user-cards {
+    display: grid;
+    justify-content: space-between;
+    grid-gap: 30px;
+    grid-template-columns: repeat(auto-fill, 180px);
+}
+
+.user-card-in-list {
+    width: 180px;
+    overflow: hidden;
+}
+
+.user-card-in-list p {
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.user-avatar-in-list {
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    height: 180px;
+}
+
+@media only screen and (max-width: 820px) {
+    .user-cards {
+        justify-content: center;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .user-card-in-list {
+        width: 140px;
+    }
+
+    .user-cards {
+        grid-template-columns: repeat(auto-fill, 140px);
+    }
+}

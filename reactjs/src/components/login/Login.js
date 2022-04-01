@@ -1,22 +1,34 @@
-import { useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import http from "../../plugins/http";
-import { useDispatch, useSelector } from "react-redux";
-import { setUserId, setUserEmail, setUserName } from "../../redux/User";
+import { useDispatch } from "react-redux";
+import { setUser, setUserName } from "../../redux/User";
 import Button from "../button/Button";
+import { Form } from "react-bootstrap";
 
 const Login = () => {
     const emailRef = useRef();
     const passwordRef = useRef();
-
-    //const { email } = useSelector((state) => state.userData.value);
     const dispatch = useDispatch();
 
     const [getResponse, setResponse] = useState("");
     const [getInRequest, setInRequest] = useState(false);
+    let [getOpacity, setOpacity] = useState(0);
+    let [getUserId, setUserId] = useState("");
+    const [getRememberLogin, setRememberLogin] = useState(true);
 
     const navigate = useNavigate();
     const { state } = useLocation();
+
+    useEffect(() => {
+        const timeOut = setTimeout(() => {
+            setOpacity(1);
+        }, 100);
+
+        return () => {
+            clearTimeout(timeOut);
+        };
+    }, []);
 
     async function login() {
         setInRequest(true);
@@ -37,10 +49,16 @@ const Login = () => {
                     setResponse(res.message);
                 } else {
                     setResponse(res.message);
-                    dispatch(setUserId(res._id));
-                    dispatch(setUserEmail(res.email));
-                    dispatch(setUserName(res.username));
-                    navigate("/");
+                    getUserId = res.user._id;
+                    setUserId(res.user._id);
+                    dispatch(setUser(res.user));
+                    dispatch(setUserName(res.user.username));
+
+                    if (getRememberLogin) {
+                        localStorage.setItem("email", res.user.email);
+                    }
+
+                    navigate(`/profile/${getUserId}`);
                 }
             })
             .catch((err) => {
@@ -50,26 +68,52 @@ const Login = () => {
     }
 
     return (
-        <div className="main">
+        <div
+            className="main w-auto"
+            style={{ opacity: `${getOpacity}` }}
+        >
             <div className="box d-flex flex-column align-items-center">
                 <div className="d-flex flex-column justify-content-center">
                     <h2 className="text-center">Login</h2>
+                    <label
+                        htmlFor="email"
+                        className="mt-3"
+                    >
+                        Email:
+                    </label>
                     <input
+                        id="email"
                         ref={emailRef}
                         type="text"
-                        className={`mt-3 ${getInRequest && "disabled"}`}
+                        className={`${getInRequest && "disabled"}`}
                         placeholder="Email"
                         name="email"
                         defaultValue={state && state.email}
                     />
+                    <label
+                        htmlFor="password"
+                        className="mt-3"
+                    >
+                        Password:
+                    </label>
                     <input
+                        id="password"
                         ref={passwordRef}
                         type="password"
-                        className={`mt-3 ${getInRequest && "disabled"}`}
+                        className={`${getInRequest && "disabled"}`}
                         placeholder="Password"
                         name="password"
                     />
 
+                    <Form>
+                        <Form.Check
+                            className="d-flex align-items-center mt-3 gap-2"
+                            type="checkbox"
+                            label="Keep me logged in"
+                            checked={getRememberLogin}
+                            onChange={() => setRememberLogin(!getRememberLogin)}
+                        />
+                    </Form>
                     <Button
                         onClick={login}
                         className={`mt-3 ${getInRequest && "disabled"}`}
@@ -90,7 +134,7 @@ const Login = () => {
                     <div className="mt-2 text-center">
                         <Link
                             to={"/register"}
-                            className="small text-black-50"
+                            className="small"
                         >
                             Register
                         </Link>
