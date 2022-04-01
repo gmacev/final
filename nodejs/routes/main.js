@@ -4,6 +4,8 @@ const {
     registerUser,
     login,
     logout,
+    getUsers,
+    autoLogin,
 } = require("../controllers/userController");
 
 const userMiddleware = require("../middleware/userMiddleWare");
@@ -20,6 +22,9 @@ router.post(
     userMiddleware.validateUserLogin,
     login
 );
-router.post("/logout", logout);
+router.post("/logout", userMiddleware.validateIsUserLoggedIn, logout);
+router.post("/auto-login", userMiddleware.validateAutoLogin, autoLogin);
+
+router.get("/users/:count/:limit/:page", getUsers);
 
 module.exports = router;

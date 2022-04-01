@@ -68,6 +68,19 @@ module.exports = {
         next();
     },
 
+    validateAutoLogin: async (req, res, next) => {
+        const { emailLS } = req.body;
+        const { email } = req.session;
+
+        if (!email || email.toLowerCase() !== emailLS.toLowerCase())
+            return res.send({
+                error: true,
+                message: "Session expired",
+            });
+
+        next();
+    },
+
     validateEmail: async (req, res, next) => {
         const { email } = req.body;
 
