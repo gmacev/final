@@ -6,6 +6,15 @@
     font-size: 18px;
 }
 
+.button-toggled {
+    background-color: #00243c;
+    outline: 1px solid black;
+}
+
+svg {
+    pointer-events: none;
+}
+
 .button:hover {
     background-color: #00243c;
 }

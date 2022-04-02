@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import http from "./plugins/http";
 import { setUser, setUserName } from "./redux/User";
 import { useDispatch } from "react-redux";
+import CreateThreadPage from "./pages/CreateThreadPage";
 const socket = io.connect(process.env.REACT_APP_SOCKETS_SERVER);
 
 function App() {
@@ -64,6 +65,10 @@ function App() {
                     <Route
                         path={"/profile/:id"}
                         element={<ProfilePage />}
+                    />
+                    <Route
+                        path={"/new-thread"}
+                        element={<CreateThreadPage />}
                     />
                 </Routes>
             </BrowserRouter>

@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetUserState } from "../../redux/User";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../button/Button";
+import { MdCreateNewFolder } from "react-icons/md";
 
 const Toolbar = () => {
     const { email, _id } = useSelector((state) => state.user.value);
@@ -148,6 +149,10 @@ const Toolbar = () => {
                 </>
             ) : (
                 <>
+                    <Link to={"/new-thread"}>
+                        <MdCreateNewFolder />
+                        <p>New thread</p>
+                    </Link>
                     <Link to={`/profile/${_id}`}>
                         <HiUserCircle />
                         <p>Profile</p>
