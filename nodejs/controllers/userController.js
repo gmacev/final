@@ -1,11 +1,6 @@
 const bcrypt = require("bcrypt");
 const models = {
     userModel: require("../models/userSchema"),
-    /*productDb: require('../models/productSchema'),
-    reportDb: require('../models/reportSchema'),
-    messagesDb: require('../models/messageSchema'),
-    reviewsDb: require('../models/reviewSchema'),
-    offersDb: require('../models/offerSchema')*/
 };
 //const socket = require("../app");
 //socket.ioObject.emit("auction", response)

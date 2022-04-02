@@ -11,7 +11,10 @@ const {
     changeShowEmail,
 } = require("../controllers/userController");
 
+const { createThread } = require("../controllers/threadController");
+
 const userMiddleware = require("../middleware/userMiddleWare");
+const threadMiddleware = require("../middleware/threadMiddleware");
 
 router.post(
     "/register-user",
@@ -46,5 +49,12 @@ router.post(
 
 router.get("/users/:count/:limit/:page", getUsers);
 router.get("/user/:_id", getUser);
+
+router.post(
+    "/create-thread",
+    userMiddleware.validateIsUserLoggedIn,
+    threadMiddleware.validateTitleLength,
+    createThread
+);
 
 module.exports = router;
