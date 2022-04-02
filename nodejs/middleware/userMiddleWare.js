@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../models/userSchema");
+const isImageURL = require("image-url-validator").default;
 
 module.exports = {
     validateUserRegister: async (req, res, next) => {
@@ -102,7 +103,7 @@ module.exports = {
         if (!email) {
             return res.send({
                 error: true,
-                message: "User is not logged in",
+                message: "Please login again",
             });
         }
 
@@ -114,6 +115,15 @@ module.exports = {
                 message: "User doesn't exist",
             });
         }
+
+        next();
+    },
+
+    validateImage: async (req, res, next) => {
+        const { image } = req.body;
+
+        if (!(await isImageURL(image)) && !image.includes("data:image"))
+            return res.send({ error: true, message: "Invalid image URL" });
 
         next();
     },

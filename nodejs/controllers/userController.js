@@ -79,6 +79,7 @@ module.exports = {
                 avatar: response.avatar,
                 registeredTimeStamp: response.registeredTimeStamp,
                 postCount: response.postCount,
+                showEmail: response.showEmail,
             };
 
             return res.send({
@@ -122,6 +123,56 @@ module.exports = {
             usersArr[0].map((user) => (user.password = undefined));
         } else total = await models["userModel"].count();
 
-        return res.send({ users: usersArr[0], total: total });
+        return res.send({ error: false, users: usersArr[0], total: total });
+    },
+
+    getUser: async (req, res) => {
+        const { _id } = req.params;
+
+        const user = await models["userModel"].findOne({ _id: _id });
+
+        user.password = undefined;
+
+        return res.send({ error: false, user: user });
+    },
+
+    changeAvatar: async (req, res) => {
+        let response = {};
+        try {
+            response = await models["userModel"].findOneAndUpdate(
+                { email: req.session.email },
+                { $set: { avatar: req.body.image } },
+                { new: true }
+            );
+        } catch (e) {
+            console.log(e);
+            return res.send({ error: true, message: e });
+        }
+
+        return res.send({
+            error: false,
+            message: "Avatar changed successfully",
+            avatar: response.avatar,
+        });
+    },
+
+    changeShowEmail: async (req, res) => {
+        let response = {};
+        try {
+            response = await models["userModel"].findOneAndUpdate(
+                { email: req.session.email },
+                { $set: { showEmail: req.body.showEmail } },
+                { new: true }
+            );
+        } catch (e) {
+            console.log(e);
+            return res.send({ error: true, message: e });
+        }
+
+        return res.send({
+            error: false,
+            message: "Show email status changed successfully",
+            showEmail: response.showEmail,
+        });
     },
 };
