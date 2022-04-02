@@ -37,6 +37,7 @@ const Toolbar = () => {
     function logOut() {
         setShowSearchField(false);
         dispatch(resetUserState());
+        localStorage.removeItem("email");
         navigate("/login");
     }
 

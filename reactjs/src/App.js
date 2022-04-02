@@ -19,27 +19,29 @@ function App() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        http.post(
-            {
-                emailLS: localStorage.getItem("email"),
-            },
-            "auto-login"
-        )
-            .then((res) => {
-                if (res.error) {
-                    console.log(res.error);
-                } else {
-                    dispatch(setUser(res.user));
-                    dispatch(setUserName(res.user.username));
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        if (localStorage.getItem("email")) {
+            http.post(
+                {
+                    emailLS: localStorage.getItem("email"),
+                },
+                "auto-login"
+            )
+                .then((res) => {
+                    if (res.error) {
+                        console.log(res.error);
+                    } else {
+                        dispatch(setUser(res.user));
+                        dispatch(setUserName(res.user.username));
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
     }, []);
 
     return (
-        <div className="wrapper d-flex justify-content-center align-items-center flex-column">
+        <div className="wrapper d-flex align-items-center flex-column">
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <Toolbar />
                 <Routes>

@@ -113,11 +113,16 @@ p {
     pointer-events: none;
 }
 
+.alert {
+    padding: unset !important;
+}
+
 .alert-light {
     background-color: unset !important;
     border: unset !important;
     max-width: 300px;
     text-align: center;
+    color: #006dff !important;
 }
 
 ::-webkit-scrollbar {
@@ -140,6 +145,14 @@ p {
     .main {
         margin: 15px 15px 15px 80px;
     }
+
+    .login,
+    .register {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 @media only screen and (max-width: 460px) {
@@ -150,9 +163,6 @@ p {
     .main,
     .login,
     .register {
-        width: auto;
-    }
-     {
         margin: 15px 0 15px 60px;
         width: calc(100% - 85px) !important;
     }

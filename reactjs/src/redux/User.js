@@ -10,6 +10,7 @@ export const userSlice = createSlice({
             avatar: "",
             registeredTimeStamp: 0,
             postCount: 0,
+            showEmail: false,
         },
     },
     reducers: {
@@ -25,13 +26,23 @@ export const userSlice = createSlice({
             state.value.avatar = action.payload;
         },
 
+        setShowEmail: (state, action) => {
+            state.value.showEmail = action.payload;
+        },
+
         resetUserState: (state, action) => {
             state.value.email = userSlice.getInitialState().value.email;
+            state.value._id = userSlice.getInitialState().value._id;
         },
     },
 });
 
-export const { setUser, setUserName, setUserAvatar, resetUserState } =
-    userSlice.actions;
+export const {
+    setUser,
+    setUserName,
+    setUserAvatar,
+    setShowEmail,
+    resetUserState,
+} = userSlice.actions;
 
 export default userSlice.reducer;
