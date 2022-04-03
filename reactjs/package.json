@@ -8,6 +8,8 @@
         "@testing-library/react": "^12.1.4",
         "@testing-library/user-event": "^13.5.0",
         "bootstrap": "^5.1.3",
+        "html-react-parser": "^1.4.10",
+        "image-extensions": "^1.1.0",
         "is-hotkey": "^0.2.0",
         "react": "^17.0.2",
         "react-bootstrap": "^2.2.2",

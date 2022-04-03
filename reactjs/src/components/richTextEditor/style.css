@@ -1,7 +1,27 @@
-/*d-flex flex-wrap justify-content-center gap-2*/
+.create-thread {
+    width: calc(100% - 70px);
+}
 
-.create-thread .btn-group {
-    display: flex;
-    justify-content: space-between;
-    gap: 3px;
+.create-thread input {
+    width: 100%;
+    max-width: unset;
+}
+
+.editor-button:hover {
+    background-color: #00528a !important;
+}
+
+.button-toggled {
+    background-color: #4ac9da !important;
+    outline: 1px solid #164949;
+}
+
+.editor-button svg {
+    font-size: 23px;
+}
+
+@media only screen and (max-width: 500px) {
+    .editor-button {
+        padding: 5px;
+    }
 }

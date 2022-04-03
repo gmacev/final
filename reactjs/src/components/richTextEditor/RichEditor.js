@@ -1,12 +1,13 @@
 import React, { useCallback, useMemo, useState } from "react";
-import isHotkey from "is-hotkey";
 import { Editable, withReact, Slate, useSlate } from "slate-react";
 import { createEditor, Editor, Transforms } from "slate";
 import { withHistory } from "slate-history";
 import "./style.css";
 import "../button/style.css";
+import imageExtensions from "image-extensions";
 
-import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
+import parse from "html-react-parser";
+
 import {
     MdFormatBold,
     MdFormatItalic,
@@ -15,126 +16,159 @@ import {
     MdOutlineFormatListBulleted,
 } from "react-icons/md";
 import { BiHeading } from "react-icons/bi";
+import DisplayTextEditorOutput from "./DisplayTextEditorOutput";
+import Button from "../button/Button";
 
-const HOTKEYS = {
-    "mod+b": "bold",
-    "mod+i": "italic",
-    "mod+u": "underline",
-    "mod+`": "code",
-};
-
-const RichEditor = ({ value, setValue }) => {
+const RichEditor = ({ getValue, setValue, title }) => {
     const renderElement = useCallback((props) => <Element {...props} />, []);
     const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
-    const [getBtnValue, setBtnValue] = useState([false, true]);
+    const [getBtnValue, setBtnValue] = useState([false, false]);
+    const [getEditorEnabled, setEditorEnabled] = useState(false);
+    let [getImage, setImage] = useState(null);
 
     const handleChange = (e) => {
-        //console.log(e, e.target.parentNode.children[0].value);
-        const index = e.target.parentNode.children[0].value;
+        const index = Number(e.target.parentNode.children[0].value);
 
         const btnValues = [...getBtnValue];
-        console.log(btnValues, index);
         btnValues[index] = !btnValues[index];
 
-        // console.log(btnValues);
-
+        if (index === 3) {
+            btnValues[4] = false;
+            btnValues[5] = false;
+        } else if (index === 4) {
+            btnValues[3] = false;
+            btnValues[5] = false;
+        } else if (index === 5) {
+            btnValues[3] = false;
+            btnValues[4] = false;
+        }
         setBtnValue(btnValues);
-        // e.target.parentNode.children[0].value = btnValues[index];
-
-        //console.log(e.target.parentNode.children[0].value);
     };
 
-    return (
-        <div className="box2 p-1 mt-4">
-            <Slate
-                editor={editor}
-                value={value}
-                onChange={(value) => {
-                    console.log(value);
-                    setValue(value);
-                }}
-            >
-                <Toolbar>
-                    <ToggleButtonGroup
-                        type="checkbox"
-                        value={getBtnValue}
-                    >
-                        <MarkButton
-                            format="bold"
-                            value={0}
-                            handleChange={handleChange}
-                            getBtnValue={getBtnValue}
-                        >
-                            <MdFormatBold />
-                        </MarkButton>
-                        <MarkButton
-                            format="italic"
-                            value={1}
-                            handleChange={handleChange}
-                            getBtnValue={getBtnValue}
-                        >
-                            <MdFormatItalic />
-                        </MarkButton>
-                        <MarkButton
-                            format="underline"
-                            value={2}
-                            handleChange={handleChange}
-                            getBtnValue={getBtnValue}
-                        >
-                            <MdFormatUnderlined />
-                        </MarkButton>
-                        <BlockButton
-                            format="heading-one"
-                            value={3}
-                            handleChange={handleChange}
-                            getBtnValue={getBtnValue}
-                        >
-                            <BiHeading />
-                        </BlockButton>
-                        <BlockButton
-                            format="numbered-list"
-                            value={4}
-                            handleChange={handleChange}
-                            getBtnValue={getBtnValue}
-                        >
-                            <MdFormatListNumbered />
-                        </BlockButton>
-                        <BlockButton
-                            format="bulleted-list"
-                            value={5}
-                            handleChange={handleChange}
-                            getBtnValue={getBtnValue}
-                        >
-                            <MdOutlineFormatListBulleted />
-                        </BlockButton>
-                    </ToggleButtonGroup>
-                </Toolbar>
+    function textInput(val) {
+        if (!getEditorEnabled) setEditorEnabled(true);
 
-                <div className="pl-1">
-                    <Editable
-                        renderElement={renderElement}
-                        renderLeaf={renderLeaf}
-                        placeholder="Enter some rich text…"
-                        spellCheck
-                        autoFocus
-                        onKeyDown={(event) => {
-                            for (const hotkey in HOTKEYS) {
-                                if (isHotkey(hotkey, event)) {
-                                    event.preventDefault();
-                                    const mark = HOTKEYS[hotkey];
-                                    toggleMark(editor, mark);
-                                }
-                            }
-                        }}
+        setValue(val);
+
+        val.map((v) =>
+            v.children.map(async (paragraph) => {
+                if (
+                    paragraph &&
+                    paragraph.text &&
+                    (paragraph.text.includes("data:image") ||
+                        (paragraph.text.includes("http") &&
+                            (paragraph.text.includes(".png") ||
+                                paragraph.text.includes(".jpg") ||
+                                paragraph.text.includes(".jpeg") ||
+                                paragraph.text.includes(".bmp") ||
+                                paragraph.text.includes(".gif") ||
+                                paragraph.text.includes(".webp"))))
+                ) {
+                    setImage(parse(`<img src="${paragraph.text}" alt=""/>`));
+                }
+            })
+        );
+    }
+
+    return (
+        <div className="w-100">
+            <div className="box2 p-3">
+                <Slate
+                    editor={editor}
+                    value={getValue}
+                    onChange={textInput}
+                >
+                    <Toolbar>
+                        <div className="d-flex flex-wrap justify-content-center gap-2">
+                            <MarkButton
+                                format="bold"
+                                value={0}
+                                handleChange={handleChange}
+                                getBtnValue={getBtnValue}
+                                getEditorEnabled={getEditorEnabled}
+                            >
+                                <MdFormatBold />
+                            </MarkButton>
+                            <MarkButton
+                                format="italic"
+                                value={1}
+                                handleChange={handleChange}
+                                getBtnValue={getBtnValue}
+                                getEditorEnabled={getEditorEnabled}
+                            >
+                                <MdFormatItalic />
+                            </MarkButton>
+                            <MarkButton
+                                format="underline"
+                                value={2}
+                                handleChange={handleChange}
+                                getBtnValue={getBtnValue}
+                                getEditorEnabled={getEditorEnabled}
+                            >
+                                <MdFormatUnderlined />
+                            </MarkButton>
+                            <BlockButton
+                                format="heading-one"
+                                value={3}
+                                handleChange={handleChange}
+                                getBtnValue={getBtnValue}
+                                getEditorEnabled={getEditorEnabled}
+                            >
+                                <BiHeading />
+                            </BlockButton>
+                            <BlockButton
+                                format="numbered-list"
+                                value={4}
+                                handleChange={handleChange}
+                                getBtnValue={getBtnValue}
+                                getEditorEnabled={getEditorEnabled}
+                            >
+                                <MdFormatListNumbered />
+                            </BlockButton>
+                            <BlockButton
+                                format="bulleted-list"
+                                value={5}
+                                handleChange={handleChange}
+                                getBtnValue={getBtnValue}
+                                getEditorEnabled={getEditorEnabled}
+                            >
+                                <MdOutlineFormatListBulleted />
+                            </BlockButton>
+                        </div>
+                    </Toolbar>
+
+                    <div className="pl-1">
+                        <Editable
+                            id="textBox"
+                            renderElement={renderElement}
+                            renderLeaf={renderLeaf}
+                            placeholder="..."
+                            spellCheck
+                            tabIndex="-1"
+                            autoFocus
+                        />
+                    </div>
+                </Slate>
+            </div>
+            {getValue && (
+                <div className="box2 mt-3 p-3">
+                    <h3 className="text-center">Preview</h3>
+
+                    <h5>{title}</h5>
+                    <DisplayTextEditorOutput
+                        getValue={getValue}
+                        setValue={setValue}
+                        randomNum={Math.floor(Math.random() * 999999)}
                     />
                 </div>
-            </Slate>
+            )}
         </div>
     );
 };
 
 export const Element = ({ attributes, children, element }) => {
+    //console.log(element);
     switch (element.type) {
         case "bulleted-list":
             return <ul {...attributes}>{children}</ul>;
@@ -154,10 +188,6 @@ export const Leaf = ({ attributes, children, leaf }) => {
         children = <strong>{children}</strong>;
     }
 
-    if (leaf.code) {
-        children = <code>{children}</code>;
-    }
-
     if (leaf.italic) {
         children = <em>{children}</em>;
     }
@@ -175,23 +205,24 @@ const BlockButton = ({
     value,
     handleChange,
     getBtnValue,
+    getEditorEnabled,
 }) => {
     const editor = useSlate();
+
     return (
         <div className="mt-1">
             <button
                 type={format}
                 value={value}
-                selected={isBlockActive(editor, format)}
                 onMouseDown={(event) => {
                     event.preventDefault();
                     toggleBlock(editor, format);
                 }}
                 onClick={handleChange}
                 style={{ lineHeight: 1 }}
-                className={`button ${
+                className={`button editor-button ${
                     getBtnValue[parseInt(value)] && "button-toggled"
-                }`}
+                } ${!getEditorEnabled && "disabled"}`}
             >
                 {children}
             </button>
@@ -199,33 +230,39 @@ const BlockButton = ({
     );
 };
 
-const MarkButton = ({ format, children, value, handleChange }) => {
+const MarkButton = ({
+    format,
+    children,
+    value,
+    handleChange,
+    getBtnValue,
+    getEditorEnabled,
+}) => {
     const editor = useSlate();
     return (
         <div className="mt-1">
-            <ToggleButton
+            <button
                 type={format}
                 value={value}
-                selected={isMarkActive(editor, format)}
                 onMouseDown={(event) => {
                     event.preventDefault();
                     toggleMark(editor, format);
                 }}
                 onClick={handleChange}
                 style={{ lineHeight: 1 }}
+                className={`button editor-button ${
+                    getBtnValue[parseInt(value)] && "button-toggled"
+                } ${!getEditorEnabled && "disabled"}`}
             >
                 {children}
-            </ToggleButton>
+            </button>
         </div>
     );
 };
 
 const Menu = React.forwardRef(({ children, ...props }, ref) => (
     <>
-        <div className="">{children}</div>
-        <div className="pt-2 m-0 p-0">
-            <hr />
-        </div>
+        <div className="mb-4">{children}</div>
     </>
 ));
 

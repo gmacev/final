@@ -112,6 +112,7 @@ p {
 
 .disabled {
     pointer-events: none;
+    opacity: 50%;
 }
 
 .alert {

@@ -2,19 +2,13 @@ import React from "react";
 
 import RichEditor from "./RichEditor";
 
-const TextEditor = ({ getOutput, setOutput }) => {
-    getOutput = [
-        {
-            type: "paragraph",
-            children: [{ text: "" }],
-        },
-    ];
-
+const TextEditor = ({ getOutput, setOutput, title }) => {
     return (
         <>
             <RichEditor
-                value={getOutput}
+                getValue={getOutput}
                 setValue={setOutput}
+                title={title}
             />
         </>
     );
