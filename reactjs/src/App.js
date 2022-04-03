@@ -29,10 +29,11 @@ function App() {
             )
                 .then((res) => {
                     if (res.error) {
-                        console.log(res.error);
+                        console.log(res.message);
                     } else {
                         dispatch(setUser(res.user));
                         dispatch(setUserName(res.user.username));
+                        console.log(res.user);
                     }
                 })
                 .catch((err) => {

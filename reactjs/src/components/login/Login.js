@@ -36,6 +36,16 @@ const Login = () => {
 
         emailRef.current.value = emailRef.current.value.trim();
 
+        if (emailRef.current.value.length <= 0) {
+            setInRequest(false);
+            return setResponse("Email can't be empty");
+        }
+
+        if (passwordRef.current.value.length <= 0) {
+            setInRequest(false);
+            return setResponse("Password can't be empty");
+        }
+
         http.post(
             {
                 email: emailRef.current.value,

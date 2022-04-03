@@ -32,6 +32,31 @@ const RegisterUserComp = () => {
         emailRef.current.value = emailRef.current.value.trim();
         usernameRef.current.value = usernameRef.current.value.trim();
 
+        if (emailRef.current.value.length <= 0) {
+            setInRequest(false);
+            return setResponse("Email can't be empty");
+        }
+
+        if (password1Ref.current.value.length <= 0) {
+            setInRequest(false);
+            return setResponse("Password can't be empty");
+        }
+
+        if (password1Ref.current.value !== password2Ref.current.value) {
+            setInRequest(false);
+            return setResponse("Passwords do not match");
+        }
+
+        if (
+            password1Ref.current.value.length < 5 ||
+            password1Ref.current.value.length > 50
+        ) {
+            setInRequest(false);
+            return setResponse(
+                "Password length should be between 5 and 50 characters"
+            );
+        }
+
         http.post(
             {
                 email: emailRef.current.value,

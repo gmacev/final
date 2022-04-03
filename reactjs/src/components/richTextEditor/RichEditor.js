@@ -1,19 +1,5 @@
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
-    useRef,
-} from "react";
-import {
-    Editable,
-    withReact,
-    Slate,
-    useSlate,
-    useSelected,
-    useFocused,
-    ReactEditor,
-} from "slate-react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
+import { Editable, withReact, Slate, useSlate, ReactEditor } from "slate-react";
 import { createEditor, Editor, Transforms, Path } from "slate";
 import { withHistory } from "slate-history";
 import "./style.css";
@@ -30,7 +16,6 @@ import {
 } from "react-icons/md";
 import { BiHeading } from "react-icons/bi";
 import { ImImage } from "react-icons/im";
-import DisplayTextEditorOutput from "./DisplayTextEditorOutput";
 import { IoLogoYoutube } from "react-icons/io";
 
 const RichEditor = ({ getValue, setValue }) => {
@@ -82,7 +67,10 @@ const RichEditor = ({ getValue, setValue }) => {
 
     return (
         <div className="w-100">
-            <div className="box2 p-3">
+            <div
+                className="box2 p-3"
+                style={{ minHeight: "350px" }}
+            >
                 <Slate
                     editor={editor}
                     value={getValue}
@@ -288,9 +276,6 @@ export const createYoutubeNode = (src) => ({
 });
 
 const ImageElement = ({ attributes, children, element }) => {
-    const selected = useSelected();
-    const focused = useFocused();
-
     return (
         <div {...attributes}>
             <div
@@ -302,9 +287,6 @@ const ImageElement = ({ attributes, children, element }) => {
                     src={element.src}
                     className="editor-image"
                     style={{
-                        boxShadow: `${
-                            selected && focused ? "0 0 0 5px #B4D5FF" : "none"
-                        }`,
                         userSelect: "none",
                     }}
                 />
@@ -315,8 +297,6 @@ const ImageElement = ({ attributes, children, element }) => {
 };
 
 const YoutubeElement = ({ attributes, children, element }) => {
-    const selected = useSelected();
-    const focused = useFocused();
     return (
         <div {...attributes}>
             <div
@@ -333,9 +313,7 @@ const YoutubeElement = ({ attributes, children, element }) => {
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     style={{
-                        boxShadow: `${
-                            selected && focused ? "0 0 0 5px #B4D5FF" : "none"
-                        }`,
+                        userSelect: "none",
                     }}
                 />
             </div>

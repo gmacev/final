@@ -4,6 +4,7 @@
     color: white;
     transition: all 200ms ease-in;
     font-size: 18px;
+    word-break: keep-all;
 }
 
 svg {

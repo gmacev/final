@@ -5,7 +5,7 @@ import { Slate, Editable, withReact } from "slate-react";
 import { Element, Leaf } from "./RichEditor";
 import { withHistory } from "slate-history";
 
-const DisplayTextEditorOutput = ({ getValue, setValue, randomNum }) => {
+const DisplayTextEditorOutput = ({ getValue, randomNum }) => {
     const renderElement = useCallback((props) => <Element {...props} />, []);
     const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
 

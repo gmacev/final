@@ -20,7 +20,10 @@ const User = ({ user }) => {
                     })}
                 </p>
                 <p>
-                    <b>Post count: {user.postCount}</b>
+                    <b>Thread count:</b> {user.threadCount}
+                </p>
+                <p>
+                    <b>Post count:</b> {user.postCount}
                 </p>
                 <Link
                     to={`/profile/${user._id}`}

@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MdOutlineTopic } from "react-icons/md";
 import { RiMessage3Line } from "react-icons/ri";
+import { BiMessageSquareEdit } from "react-icons/bi";
 
 import "./style.css";
 import Button from "../button/Button";
 import http from "../../plugins/http";
-import { setUserAvatar, setShowEmail } from "../../redux/User";
+import { setUserAvatar, setShowEmail, setUserName } from "../../redux/User";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Form } from "react-bootstrap";
@@ -17,9 +18,12 @@ const Profile = () => {
     const [getActiveTab, setActiveTab] = useState(0);
     const [getInRequest, setInRequest] = useState(false);
     const [getResponse, setResponse] = useState("");
+    const [getResponse2, setResponse2] = useState("");
     const [getUser, setUser] = useState({});
+    const [getShowUpdateInput, setShowUpdateInput] = useState(false);
 
     const dispatch = useDispatch();
+    const usernameRef = useRef();
     const imageUrlRef = useRef();
     const mountedRef = useRef(true);
     const { id } = useParams();
@@ -38,7 +42,6 @@ const Profile = () => {
                 })
                 .catch((err) => {
                     setInRequest(false);
-                    setResponse(err);
                 });
         }, 100);
 
@@ -48,7 +51,9 @@ const Profile = () => {
         };
     }, []);
 
-    function postCall(route, state, resValue, prop, value) {
+    function postCall(route, state, resValue, prop, value, responseSet) {
+        responseSet("");
+
         http.post(
             {
                 [prop]: value,
@@ -58,9 +63,9 @@ const Profile = () => {
             .then((res) => {
                 if (res.error) {
                     setInRequest(false);
-                    setResponse(res.message);
+                    responseSet(res.message);
                 } else {
-                    setResponse(res.message);
+                    responseSet(res.message);
                     dispatch(state(res[resValue]));
 
                     if (user && user._id === id) {
@@ -73,7 +78,7 @@ const Profile = () => {
             .catch((err) => {
                 console.log(err);
                 setInRequest(false);
-                setResponse(err);
+                responseSet(err);
             });
     }
 
@@ -91,7 +96,73 @@ const Profile = () => {
                             className="profile-avatar"
                         />
                         <div className="profile-info">
-                            <h2>{getUser.username}</h2>
+                            {!getShowUpdateInput ? (
+                                <div className="display-name d-flex gap-1">
+                                    <h2>{getUser.username}</h2>
+                                    <div
+                                        className="edit-display-name-btn"
+                                        onClick={() =>
+                                            setShowUpdateInput(
+                                                !getShowUpdateInput
+                                            )
+                                        }
+                                        title="Change display name"
+                                    >
+                                        <BiMessageSquareEdit />
+                                    </div>
+                                </div>
+                            ) : (
+                                user &&
+                                user._id === id && (
+                                    <div className="d-flex flex-column align-items-center mb-2">
+                                        <div className="w-100 d-flex align-items-center justify-content-center">
+                                            <div>
+                                                <label htmlFor="username-input">
+                                                    New display name:
+                                                </label>
+                                                <input
+                                                    id="username-input"
+                                                    ref={usernameRef}
+                                                    type="text"
+                                                    className={`${
+                                                        getInRequest &&
+                                                        "disabled"
+                                                    } w-100`}
+                                                    placeholder="Display name"
+                                                />
+                                            </div>
+                                            <Button
+                                                onClick={() => {
+                                                    setShowUpdateInput(false);
+
+                                                    postCall(
+                                                        "change-username",
+                                                        setUserName,
+                                                        "username",
+                                                        "username",
+                                                        usernameRef.current
+                                                            .value,
+                                                        setResponse2
+                                                    );
+                                                }}
+                                                className={`align-self-end ${
+                                                    getInRequest && "disabled"
+                                                }`}
+                                            >
+                                                Change
+                                            </Button>
+                                        </div>
+                                        {getResponse && getResponse.length > 0 && (
+                                            <div
+                                                className="alert alert-light mt-3 mb-3"
+                                                role="alert"
+                                            >
+                                                {getResponse}
+                                            </div>
+                                        )}
+                                    </div>
+                                )
+                            )}
                             {(getUser.showEmail || user._id === id) && (
                                 <h5>{getUser.email}</h5>
                             )}
@@ -104,6 +175,9 @@ const Profile = () => {
                                     month: "2-digit",
                                     day: "2-digit",
                                 })}
+                            </p>
+                            <p>
+                                <b>Thread count:</b> {getUser.threadCount}
                             </p>
                             <p>
                                 <b>Post count:</b> {getUser.postCount}
@@ -124,10 +198,6 @@ const Profile = () => {
                                         className={`${
                                             getInRequest && "disabled"
                                         } w-100`}
-                                        style={{
-                                            maxWidth: "300px",
-                                            minWidth: "200px",
-                                        }}
                                         placeholder="Image URL"
                                     />
                                 </div>
@@ -138,7 +208,8 @@ const Profile = () => {
                                             setUserAvatar,
                                             "avatar",
                                             "image",
-                                            imageUrlRef.current.value
+                                            imageUrlRef.current.value,
+                                            setResponse
                                         )
                                     }
                                     className={`align-self-end ${
@@ -160,7 +231,8 @@ const Profile = () => {
                                             setShowEmail,
                                             "showEmail",
                                             "showEmail",
-                                            !user.showEmail
+                                            !user.showEmail,
+                                            setResponse
                                         )
                                     }
                                 />
