@@ -33,17 +33,15 @@ import { ImImage } from "react-icons/im";
 import DisplayTextEditorOutput from "./DisplayTextEditorOutput";
 import { IoLogoYoutube } from "react-icons/io";
 
-const RichEditor = ({ getValue, setValue, title }) => {
+const RichEditor = ({ getValue, setValue }) => {
     const renderElement = useCallback((props) => <Element {...props} />, []);
     const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
-    /*const editor = useMemo(
-        () => withImages(withHistory(withReact(createEditor()))),
-        []
-    );*/
 
     const editorRef = useRef();
+
     if (!editorRef.current)
         editorRef.current = withHistory(withReact(createEditor()));
+
     const editor = editorRef.current;
 
     const [getBtnValue, setBtnValue] = useState([false, false]);
@@ -51,7 +49,6 @@ const RichEditor = ({ getValue, setValue, title }) => {
 
     useEffect(() => {
         if (!getValue) {
-            //Transforms.deselect(editor);
             editor.selection = {
                 anchor: { path: [0, 0], offset: 0 },
                 focus: { path: [0, 0], offset: 0 },
@@ -149,11 +146,15 @@ const RichEditor = ({ getValue, setValue, title }) => {
                             </BlockButton>
                             <InsertImageButton
                                 getEditorEnabled={getEditorEnabled}
+                                getBtnValue={getBtnValue}
+                                setBtnValue={setBtnValue}
                             >
                                 <ImImage />
                             </InsertImageButton>
                             <InsertYoutubeVideoButton
                                 getEditorEnabled={getEditorEnabled}
+                                getBtnValue={getBtnValue}
+                                setBtnValue={setBtnValue}
                             >
                                 <IoLogoYoutube />
                             </InsertYoutubeVideoButton>
@@ -184,18 +185,7 @@ const isImageUrl = (url) => {
     return imageExtensions.includes(ext);
 };
 
-const withImages = (editor) => {
-    const { isVoid } = editor;
-
-    editor.isVoid = (element) => {
-        console.log(element.type);
-        return element.type === "image" ? true : isVoid(element);
-    };
-
-    return editor;
-};
-
-const insertImage = (editor, url) => {
+const insertImage = (editor, url, getBtnValue, setBtnValue) => {
     if (!url) return;
 
     const { selection } = editor;
@@ -209,48 +199,33 @@ const insertImage = (editor, url) => {
             selection.focus?.path
         );
 
-        console.log(image);
         if (editor.isVoid(parentNode)) {
-            // Insert the new image node after the void node or a node with content
             Transforms.insertNodes(editor, image, {
                 at: Path.next(parentPath),
                 select: true,
             });
-            console.log("1", url);
         } else {
-            // If the node is empty, replace it instead
             Transforms.removeNodes(editor, { at: parentPath });
-            /*Transforms.insertNodes(editor, parentNode, { at: parentPath });*/
             Transforms.insertNodes(editor, image, {
                 at: parentPath,
                 select: true,
             });
             Transforms.insertNodes(editor, parentNode, { at: parentPath });
-
-            /*const current_path = editor.selection.anchor.path[0];
-
-            const point = {
-                anchor: { path: [current_path + 1, 0], offset: 0 },
-                focus: { path: [current_path + 1, 0], offset: 0 },
-            };
-            // set focus
-            // clone to store selection
-
-            Transforms.select(editor, point);*/
-            //ReactEditor.focus(editor);
-
-            console.log("2", url);
         }
     } else {
-        // Insert the new image node at the bottom of the Editor when selection
-        // is falsey
-
         Transforms.insertNodes(editor, image, { select: true });
-        console.log("3", url);
     }
+
+    const btnValues = [...getBtnValue];
+
+    btnValues.forEach((val, index) => {
+        btnValues[index] = false;
+    });
+
+    setBtnValue(btnValues);
 };
 
-const insertYoutubeVideo = (editor, url) => {
+const insertYoutubeVideo = (editor, url, getBtnValue, setBtnValue) => {
     if (!url) return;
 
     const { selection } = editor;
@@ -263,33 +238,30 @@ const insertYoutubeVideo = (editor, url) => {
             editor,
             selection.focus?.path
         );
-
-        console.log(video);
         if (editor.isVoid(parentNode)) {
-            // Insert the new image node after the void node or a node with content
             Transforms.insertNodes(editor, video, {
                 at: Path.next(parentPath),
                 select: true,
             });
-            console.log("1", url);
         } else {
-            // If the node is empty, replace it instead
             Transforms.removeNodes(editor, { at: parentPath });
-            /*Transforms.insertNodes(editor, parentNode, { at: parentPath });*/
             Transforms.insertNodes(editor, video, {
                 at: parentPath,
                 select: true,
             });
             Transforms.insertNodes(editor, parentNode, { at: parentPath });
-            console.log("2", url);
         }
     } else {
-        // Insert the new image node at the bottom of the Editor when selection
-        // is falsey
-
         Transforms.insertNodes(editor, video, { select: true });
-        console.log("3", url);
     }
+
+    const btnValues = [...getBtnValue];
+
+    btnValues.forEach((val, index) => {
+        btnValues[index] = false;
+    });
+
+    setBtnValue(btnValues);
 };
 
 export const createImageNode = (alt, src) => ({
@@ -318,7 +290,7 @@ export const createYoutubeNode = (src) => ({
 const ImageElement = ({ attributes, children, element }) => {
     const selected = useSelected();
     const focused = useFocused();
-    console.log(children);
+
     return (
         <div {...attributes}>
             <div
@@ -345,7 +317,6 @@ const ImageElement = ({ attributes, children, element }) => {
 const YoutubeElement = ({ attributes, children, element }) => {
     const selected = useSelected();
     const focused = useFocused();
-    console.log(children);
     return (
         <div {...attributes}>
             <div
@@ -375,7 +346,6 @@ const YoutubeElement = ({ attributes, children, element }) => {
 
 export const Element = (props) => {
     const { attributes, children, element } = props;
-    //console.log(element);
     switch (element.type) {
         case "bulleted-list":
             return <ul {...attributes}>{children}</ul>;
@@ -390,7 +360,6 @@ export const Element = (props) => {
         case "youtube":
             return <YoutubeElement {...props} />;
         default:
-            console.log(props);
             return <p {...attributes}>{children}</p>;
     }
 };
@@ -472,7 +441,12 @@ const MarkButton = ({
     );
 };
 
-const InsertImageButton = ({ children, getEditorEnabled }) => {
+const InsertImageButton = ({
+    children,
+    getEditorEnabled,
+    getBtnValue,
+    setBtnValue,
+}) => {
     const editor = useSlate();
     return (
         <div className="mt-1">
@@ -482,7 +456,7 @@ const InsertImageButton = ({ children, getEditorEnabled }) => {
                     event.preventDefault();
                     const url = window.prompt("Enter the URL of the image:");
                     if (!url || !isImageUrl(url)) return;
-                    insertImage(editor, url);
+                    insertImage(editor, url, getBtnValue, setBtnValue);
                 }}
                 className={`button editor-button ${
                     !getEditorEnabled && "disabled"
@@ -494,7 +468,12 @@ const InsertImageButton = ({ children, getEditorEnabled }) => {
     );
 };
 
-const InsertYoutubeVideoButton = ({ children, getEditorEnabled }) => {
+const InsertYoutubeVideoButton = ({
+    children,
+    getEditorEnabled,
+    getBtnValue,
+    setBtnValue,
+}) => {
     const editor = useSlate();
     return (
         <div className="mt-1">
@@ -522,7 +501,9 @@ const InsertYoutubeVideoButton = ({ children, getEditorEnabled }) => {
 
                     insertYoutubeVideo(
                         editor,
-                        "https://www.youtube.com/embed/" + youtubeParser(url)
+                        "https://www.youtube.com/embed/" + youtubeParser(url),
+                        getBtnValue,
+                        setBtnValue
                     );
                 }}
                 className={`button editor-button ${
