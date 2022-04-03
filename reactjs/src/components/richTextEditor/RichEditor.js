@@ -1,12 +1,19 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Editable, withReact, Slate, useSlate } from "slate-react";
-import { createEditor, Editor, Transforms } from "slate";
+import {
+    Editable,
+    withReact,
+    Slate,
+    useSlate,
+    useSelected,
+    useFocused,
+    ReactEditor,
+} from "slate-react";
+import { createEditor, Editor, Transforms, Path } from "slate";
 import { withHistory } from "slate-history";
 import "./style.css";
 import "../button/style.css";
 import imageExtensions from "image-extensions";
-
-import parse from "html-react-parser";
+import isUrl from "is-url";
 
 import {
     MdFormatBold,
@@ -16,16 +23,18 @@ import {
     MdOutlineFormatListBulleted,
 } from "react-icons/md";
 import { BiHeading } from "react-icons/bi";
+import { ImImage } from "react-icons/im";
 import DisplayTextEditorOutput from "./DisplayTextEditorOutput";
-import Button from "../button/Button";
 
 const RichEditor = ({ getValue, setValue, title }) => {
     const renderElement = useCallback((props) => <Element {...props} />, []);
     const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
-    const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+    const editor = useMemo(
+        () => withImages(withHistory(withReact(createEditor()))),
+        []
+    );
     const [getBtnValue, setBtnValue] = useState([false, false]);
     const [getEditorEnabled, setEditorEnabled] = useState(false);
-    let [getImage, setImage] = useState(null);
 
     const handleChange = (e) => {
         const index = Number(e.target.parentNode.children[0].value);
@@ -48,27 +57,7 @@ const RichEditor = ({ getValue, setValue, title }) => {
 
     function textInput(val) {
         if (!getEditorEnabled) setEditorEnabled(true);
-
         setValue(val);
-
-        val.map((v) =>
-            v.children.map(async (paragraph) => {
-                if (
-                    paragraph &&
-                    paragraph.text &&
-                    (paragraph.text.includes("data:image") ||
-                        (paragraph.text.includes("http") &&
-                            (paragraph.text.includes(".png") ||
-                                paragraph.text.includes(".jpg") ||
-                                paragraph.text.includes(".jpeg") ||
-                                paragraph.text.includes(".bmp") ||
-                                paragraph.text.includes(".gif") ||
-                                paragraph.text.includes(".webp"))))
-                ) {
-                    setImage(parse(`<img src="${paragraph.text}" alt=""/>`));
-                }
-            })
-        );
     }
 
     return (
@@ -135,9 +124,14 @@ const RichEditor = ({ getValue, setValue, title }) => {
                             >
                                 <MdOutlineFormatListBulleted />
                             </BlockButton>
+                            <InsertImageButton
+                                getEditorEnabled={getEditorEnabled}
+                            >
+                                <ImImage />
+                            </InsertImageButton>
                         </div>
                     </Toolbar>
-
+                    <hr />
                     <div className="pl-1">
                         <Editable
                             id="textBox"
@@ -151,23 +145,106 @@ const RichEditor = ({ getValue, setValue, title }) => {
                     </div>
                 </Slate>
             </div>
-            {getValue && (
-                <div className="box2 mt-3 p-3">
-                    <h3 className="text-center">Preview</h3>
-
-                    <h5>{title}</h5>
-                    <DisplayTextEditorOutput
-                        getValue={getValue}
-                        setValue={setValue}
-                        randomNum={Math.floor(Math.random() * 999999)}
-                    />
-                </div>
-            )}
         </div>
     );
 };
 
-export const Element = ({ attributes, children, element }) => {
+const isImageUrl = (url) => {
+    if (!url) return false;
+    if (!isUrl(url)) return false;
+    const ext = new URL(url).pathname.split(".").pop();
+    return imageExtensions.includes(ext);
+};
+
+const withImages = (editor) => {
+    const { isVoid } = editor;
+
+    editor.isVoid = (element) => {
+        console.log(element.type);
+        return element.type === "image" ? true : isVoid(element);
+    };
+
+    return editor;
+};
+
+const insertImage = (editor, url) => {
+    if (!url) return;
+
+    const { selection } = editor;
+    const image = createImageNode("Image", url);
+
+    ReactEditor.focus(editor);
+
+    if (!!selection) {
+        const [parentNode, parentPath] = Editor.parent(
+            editor,
+            selection.focus?.path
+        );
+
+        console.log(image);
+        if (editor.isVoid(parentNode)) {
+            // Insert the new image node after the void node or a node with content
+            Transforms.insertNodes(editor, image, {
+                at: Path.next(parentPath),
+                select: true,
+            });
+            console.log("1", url);
+        } else {
+            // If the node is empty, replace it instead
+            /* Transforms.removeNodes(editor, { at: parentPath });
+            Transforms.insertNodes(editor, parentNode, { at: parentPath });*/
+            Transforms.insertNodes(editor, image, {
+                at: parentPath,
+                select: true,
+            });
+            console.log("2", url);
+        }
+    } else {
+        // Insert the new image node at the bottom of the Editor when selection
+        // is falsey
+
+        Transforms.insertNodes(editor, image, { select: true });
+        console.log("3", url);
+    }
+};
+
+export const createImageNode = (alt, src) => ({
+    type: "image",
+    alt,
+    src,
+    children: [
+        {
+            type: "paragraph",
+            children: [{ text: "" }],
+        },
+    ],
+});
+
+const ImageElement = ({ attributes, children, element }) => {
+    const selected = useSelected();
+    const focused = useFocused();
+    console.log(children);
+    return (
+        <div {...attributes}>
+            <div contentEditable={false}>
+                <img
+                    alt={element.alt}
+                    src={element.src}
+                    className="editor-image"
+                    style={{
+                        boxShadow: `${
+                            selected && focused ? "0 0 0 5px #B4D5FF" : "none"
+                        }`,
+                    }}
+                />
+            </div>
+            {children}
+        </div>
+    );
+};
+
+export const Element = (props) => {
+    const { attributes, children, element } = props;
     //console.log(element);
     switch (element.type) {
         case "bulleted-list":
@@ -178,7 +255,10 @@ export const Element = ({ attributes, children, element }) => {
             return <li {...attributes}>{children}</li>;
         case "numbered-list":
             return <ol {...attributes}>{children}</ol>;
+        case "image":
+            return <ImageElement {...props} />;
         default:
+            console.log(props);
             return <p {...attributes}>{children}</p>;
     }
 };
@@ -253,6 +333,28 @@ const MarkButton = ({
                 className={`button editor-button ${
                     getBtnValue[parseInt(value)] && "button-toggled"
                 } ${!getEditorEnabled && "disabled"}`}
+            >
+                {children}
+            </button>
+        </div>
+    );
+};
+
+const InsertImageButton = ({ children, getEditorEnabled }) => {
+    const editor = useSlate();
+    return (
+        <div className="mt-1">
+            <button
+                style={{ lineHeight: "1" }}
+                onMouseDown={(event) => {
+                    event.preventDefault();
+                    const url = window.prompt("Enter the URL of the image:");
+                    if (!url || !isImageUrl(url)) return;
+                    insertImage(editor, url);
+                }}
+                className={`button editor-button ${
+                    !getEditorEnabled && "disabled"
+                }`}
             >
                 {children}
             </button>

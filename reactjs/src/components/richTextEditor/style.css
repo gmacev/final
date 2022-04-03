@@ -7,6 +7,12 @@
     max-width: unset;
 }
 
+.editor-image {
+    display: inline-block;
+    max-width: 100%;
+    max-height: 20em;
+}
+
 .editor-button:hover {
     background-color: #00528a !important;
 }

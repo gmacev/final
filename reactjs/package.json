@@ -11,6 +11,7 @@
         "html-react-parser": "^1.4.10",
         "image-extensions": "^1.1.0",
         "is-hotkey": "^0.2.0",
+        "is-url": "^1.2.4",
         "react": "^17.0.2",
         "react-bootstrap": "^2.2.2",
         "react-dom": "^17.0.2",
