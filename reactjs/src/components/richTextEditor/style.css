@@ -13,6 +13,10 @@
     max-height: 20em;
 }
 
+.youtube-video {
+    display: inline-block;
+}
+
 .editor-button:hover {
     background-color: #00528a !important;
 }

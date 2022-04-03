@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+    useRef,
+} from "react";
 import {
     Editable,
     withReact,
@@ -25,16 +31,33 @@ import {
 import { BiHeading } from "react-icons/bi";
 import { ImImage } from "react-icons/im";
 import DisplayTextEditorOutput from "./DisplayTextEditorOutput";
+import { IoLogoYoutube } from "react-icons/io";
 
 const RichEditor = ({ getValue, setValue, title }) => {
     const renderElement = useCallback((props) => <Element {...props} />, []);
     const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
-    const editor = useMemo(
+    /*const editor = useMemo(
         () => withImages(withHistory(withReact(createEditor()))),
         []
-    );
+    );*/
+
+    const editorRef = useRef();
+    if (!editorRef.current)
+        editorRef.current = withHistory(withReact(createEditor()));
+    const editor = editorRef.current;
+
     const [getBtnValue, setBtnValue] = useState([false, false]);
     const [getEditorEnabled, setEditorEnabled] = useState(false);
+
+    useEffect(() => {
+        if (!getValue) {
+            //Transforms.deselect(editor);
+            editor.selection = {
+                anchor: { path: [0, 0], offset: 0 },
+                focus: { path: [0, 0], offset: 0 },
+            };
+        }
+    }, [getValue]);
 
     const handleChange = (e) => {
         const index = Number(e.target.parentNode.children[0].value);
@@ -129,6 +152,11 @@ const RichEditor = ({ getValue, setValue, title }) => {
                             >
                                 <ImImage />
                             </InsertImageButton>
+                            <InsertYoutubeVideoButton
+                                getEditorEnabled={getEditorEnabled}
+                            >
+                                <IoLogoYoutube />
+                            </InsertYoutubeVideoButton>
                         </div>
                     </Toolbar>
                     <hr />
@@ -171,7 +199,7 @@ const insertImage = (editor, url) => {
     if (!url) return;
 
     const { selection } = editor;
-    const image = createImageNode("Image", url);
+    const image = createImageNode("Image", url, editor);
 
     ReactEditor.focus(editor);
 
@@ -191,12 +219,26 @@ const insertImage = (editor, url) => {
             console.log("1", url);
         } else {
             // If the node is empty, replace it instead
-            /* Transforms.removeNodes(editor, { at: parentPath });
-            Transforms.insertNodes(editor, parentNode, { at: parentPath });*/
+            Transforms.removeNodes(editor, { at: parentPath });
+            /*Transforms.insertNodes(editor, parentNode, { at: parentPath });*/
             Transforms.insertNodes(editor, image, {
                 at: parentPath,
                 select: true,
             });
+            Transforms.insertNodes(editor, parentNode, { at: parentPath });
+
+            /*const current_path = editor.selection.anchor.path[0];
+
+            const point = {
+                anchor: { path: [current_path + 1, 0], offset: 0 },
+                focus: { path: [current_path + 1, 0], offset: 0 },
+            };
+            // set focus
+            // clone to store selection
+
+            Transforms.select(editor, point);*/
+            //ReactEditor.focus(editor);
+
             console.log("2", url);
         }
     } else {
@@ -204,6 +246,48 @@ const insertImage = (editor, url) => {
         // is falsey
 
         Transforms.insertNodes(editor, image, { select: true });
+        console.log("3", url);
+    }
+};
+
+const insertYoutubeVideo = (editor, url) => {
+    if (!url) return;
+
+    const { selection } = editor;
+    const video = createYoutubeNode(url);
+
+    ReactEditor.focus(editor);
+
+    if (!!selection) {
+        const [parentNode, parentPath] = Editor.parent(
+            editor,
+            selection.focus?.path
+        );
+
+        console.log(video);
+        if (editor.isVoid(parentNode)) {
+            // Insert the new image node after the void node or a node with content
+            Transforms.insertNodes(editor, video, {
+                at: Path.next(parentPath),
+                select: true,
+            });
+            console.log("1", url);
+        } else {
+            // If the node is empty, replace it instead
+            Transforms.removeNodes(editor, { at: parentPath });
+            /*Transforms.insertNodes(editor, parentNode, { at: parentPath });*/
+            Transforms.insertNodes(editor, video, {
+                at: parentPath,
+                select: true,
+            });
+            Transforms.insertNodes(editor, parentNode, { at: parentPath });
+            console.log("2", url);
+        }
+    } else {
+        // Insert the new image node at the bottom of the Editor when selection
+        // is falsey
+
+        Transforms.insertNodes(editor, video, { select: true });
         console.log("3", url);
     }
 };
@@ -220,17 +304,63 @@ export const createImageNode = (alt, src) => ({
     ],
 });
 
+export const createYoutubeNode = (src) => ({
+    type: "youtube",
+    src,
+    children: [
+        {
+            type: "paragraph",
+            children: [{ text: "" }],
+        },
+    ],
+});
+
 const ImageElement = ({ attributes, children, element }) => {
     const selected = useSelected();
     const focused = useFocused();
     console.log(children);
     return (
         <div {...attributes}>
-            <div contentEditable={false}>
+            <div
+                style={{ userSelect: "none" }}
+                contentEditable={false}
+            >
                 <img
                     alt={element.alt}
                     src={element.src}
                     className="editor-image"
+                    style={{
+                        boxShadow: `${
+                            selected && focused ? "0 0 0 5px #B4D5FF" : "none"
+                        }`,
+                        userSelect: "none",
+                    }}
+                />
+            </div>
+            {children}
+        </div>
+    );
+};
+
+const YoutubeElement = ({ attributes, children, element }) => {
+    const selected = useSelected();
+    const focused = useFocused();
+    console.log(children);
+    return (
+        <div {...attributes}>
+            <div
+                style={{ userSelect: "none" }}
+                contentEditable={false}
+            >
+                <iframe
+                    allowFullScreen={true}
+                    width="560"
+                    height="315"
+                    src={element.src}
+                    title="YouTube video player"
+                    className="youtube-video"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     style={{
                         boxShadow: `${
                             selected && focused ? "0 0 0 5px #B4D5FF" : "none"
@@ -257,6 +387,8 @@ export const Element = (props) => {
             return <ol {...attributes}>{children}</ol>;
         case "image":
             return <ImageElement {...props} />;
+        case "youtube":
+            return <YoutubeElement {...props} />;
         default:
             console.log(props);
             return <p {...attributes}>{children}</p>;
@@ -351,6 +483,47 @@ const InsertImageButton = ({ children, getEditorEnabled }) => {
                     const url = window.prompt("Enter the URL of the image:");
                     if (!url || !isImageUrl(url)) return;
                     insertImage(editor, url);
+                }}
+                className={`button editor-button ${
+                    !getEditorEnabled && "disabled"
+                }`}
+            >
+                {children}
+            </button>
+        </div>
+    );
+};
+
+const InsertYoutubeVideoButton = ({ children, getEditorEnabled }) => {
+    const editor = useSlate();
+    return (
+        <div className="mt-1">
+            <button
+                style={{ lineHeight: "1" }}
+                onMouseDown={(event) => {
+                    event.preventDefault();
+                    const url = window.prompt(
+                        "Enter the URL of the Youtube video:"
+                    );
+                    if (!url) return;
+
+                    function youtubeParser(url) {
+                        const regExp =
+                            /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+                        const match = url.match(regExp);
+                        return match && match[7].length === 11
+                            ? match[7]
+                            : false;
+                    }
+
+                    const videoUrl = youtubeParser(url);
+
+                    if (!videoUrl) return;
+
+                    insertYoutubeVideo(
+                        editor,
+                        "https://www.youtube.com/embed/" + youtubeParser(url)
+                    );
                 }}
                 className={`button editor-button ${
                     !getEditorEnabled && "disabled"
