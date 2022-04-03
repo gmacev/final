@@ -9,17 +9,21 @@ const {
     autoLogin,
     changeAvatar,
     changeShowEmail,
+    changeUsername,
 } = require("../controllers/userController");
 
 const { createThread } = require("../controllers/threadController");
+const { createPost } = require("../controllers/postController");
 
 const userMiddleware = require("../middleware/userMiddleWare");
 const threadMiddleware = require("../middleware/threadMiddleware");
+const postMiddleWare = require("../middleware/postMiddleWare");
 
 router.post(
     "/register-user",
     userMiddleware.validateEmail,
     userMiddleware.validateUserRegister,
+    userMiddleware.validateUserName,
     registerUser
 );
 
@@ -47,6 +51,13 @@ router.post(
     changeShowEmail
 );
 
+router.post(
+    "/change-username",
+    userMiddleware.validateIsUserLoggedIn,
+    userMiddleware.validateUserName,
+    changeUsername
+);
+
 router.get("/users/:count/:limit/:page", getUsers);
 router.get("/user/:_id", getUser);
 
@@ -55,6 +66,13 @@ router.post(
     userMiddleware.validateIsUserLoggedIn,
     threadMiddleware.validateTitleLength,
     createThread
+);
+
+router.post(
+    "/create-post",
+    userMiddleware.validateIsUserLoggedIn,
+    postMiddleWare.validatePostLength,
+    createPost
 );
 
 module.exports = router;

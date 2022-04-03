@@ -4,31 +4,14 @@ const isImageURL = require("image-url-validator").default;
 
 module.exports = {
     validateUserRegister: async (req, res, next) => {
-        let { email, username, password1, password2 } = req.body;
+        let { email, password1, password2 } = req.body;
 
         email = email.toLowerCase();
-        username = username.toLowerCase();
 
         let response = await userModel.findOne({ email: email });
 
         if (response)
             return res.send({ error: true, message: "User already exists" });
-
-        if (username.length > 32)
-            return res.send({
-                error: true,
-                message: "Display name can't be longer than 32 characters",
-            });
-
-        response = await userModel.findOne({
-            username: username,
-        });
-
-        if (response)
-            return res.send({
-                error: true,
-                message: "This display name is already taken",
-            });
 
         if (password1 !== password2)
             return res.send({ error: true, message: "Passwords do not match" });
@@ -40,6 +23,36 @@ module.exports = {
                     "Password length should be between 5 and 50 characters",
             });
         }
+
+        next();
+    },
+
+    validateUserName: async (req, res, next) => {
+        let { username } = req.body;
+
+        username = username.toLowerCase();
+
+        if (username.length > 32)
+            return res.send({
+                error: true,
+                message: "Display name can't be longer than 32 characters",
+            });
+
+        if (username.length <= 2)
+            return res.send({
+                error: true,
+                message: "Display name can't be shorter than 3 characters",
+            });
+
+        const response = await userModel.findOne({
+            username: username,
+        });
+
+        if (response)
+            return res.send({
+                error: true,
+                message: "This display name is already taken",
+            });
 
         next();
     },

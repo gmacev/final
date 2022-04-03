@@ -170,4 +170,24 @@ module.exports = {
             showEmail: response.showEmail,
         });
     },
+
+    changeUsername: async (req, res) => {
+        let response = {};
+        try {
+            response = await models["userModel"].findOneAndUpdate(
+                { email: req.session.email },
+                { $set: { username: req.body.username } },
+                { new: true }
+            );
+        } catch (e) {
+            console.log(e);
+            return res.send({ error: true, message: e });
+        }
+
+        return res.send({
+            error: false,
+            message: "Display name changed successfully",
+            username: response.username,
+        });
+    },
 };

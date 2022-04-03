@@ -7,7 +7,7 @@ module.exports = {
             });
         }
 
-        if (req.body.title.length >= 64) {
+        if (req.body.title.length > 64) {
             return res.send({
                 error: true,
                 message: "Title can't be longer than 64 characters",

@@ -14,6 +14,10 @@ const threadSchema = new Schema({
         type: Date,
         required: true,
     },
+    postCount: {
+        type: Number,
+        default: 1,
+    },
 });
 
 module.exports = mongoose.model("threadModel", threadSchema);
