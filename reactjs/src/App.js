@@ -7,13 +7,14 @@ import Toolbar from "./components/toolbar/Toolbar";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import UsersListPage from "./pages/UsersListPage";
+import CreateThreadPage from "./pages/CreateThreadPage";
+import ThreadListPage from "./pages/ThreadListPage";
 
 import io from "socket.io-client";
 import { useEffect } from "react";
 import http from "./plugins/http";
 import { setUser, setUserName } from "./redux/User";
 import { useDispatch } from "react-redux";
-import CreateThreadPage from "./pages/CreateThreadPage";
 const socket = io.connect(process.env.REACT_APP_SOCKETS_SERVER);
 
 function App() {
@@ -70,6 +71,10 @@ function App() {
                     <Route
                         path={"/new-thread"}
                         element={<CreateThreadPage />}
+                    />
+                    <Route
+                        path={"/threads/:page"}
+                        element={<ThreadListPage />}
                     />
                 </Routes>
             </BrowserRouter>

@@ -479,7 +479,7 @@ const InsertYoutubeVideoButton = ({
 
                     insertYoutubeVideo(
                         editor,
-                        "https://www.youtube.com/embed/" + youtubeParser(url),
+                        "https://www.youtube.com/embed/" + videoUrl,
                         getBtnValue,
                         setBtnValue
                     );

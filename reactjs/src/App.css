@@ -70,7 +70,8 @@ a {
 
 .box,
 .box2,
-.toolbar {
+.toolbar,
+.profile-avatar {
     box-shadow: rgb(12 22 44 / 70%) 0 12px 32px -12px;
 }
 
@@ -94,7 +95,7 @@ a {
 
 .main {
     margin: 130px 120px 50px 120px;
-    transition: all 700ms;
+    transition: all 500ms;
     opacity: 0;
     width: calc(100vw - 180px);
     max-width: 1200px;
@@ -182,6 +183,6 @@ p {
     }
 
     .box {
-        padding: 20px;
+        padding: 15px;
     }
 }
