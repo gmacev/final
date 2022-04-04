@@ -14,7 +14,7 @@
     border-radius: unset;
 }
 
-.thread-in-list .favorites-icon {
+.favorites-icon {
     font-size: 25px;
     color: #5376d4;
     display: flex;
@@ -59,6 +59,10 @@
     margin-left: 49px;
 }
 
+.thread-title {
+    margin: 0;
+}
+
 @media only screen and (max-width: 600px) {
     .thread-in-list {
         display: flex;
@@ -100,7 +104,7 @@
         min-width: 50px;
     }
 
-    .thread-in-list .favorites-icon {
+    .favorites-icon {
         font-size: 23px;
         z-index: 46;
     }

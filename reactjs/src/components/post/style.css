@@ -2,3 +2,59 @@
     grid-template-columns: 1fr 0.5fr;
     grid-template-areas: ". .";
 }
+
+.user-info {
+    min-width: 200px;
+    min-height: 350px;
+}
+
+.post {
+    min-width: 450px;
+}
+
+.user-info,
+.post {
+    padding: 20px;
+    width: 100%;
+}
+
+.avatar-in-thread {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 3px;
+}
+
+.user-info p {
+    font-size: 13px;
+}
+
+.post-owner-email {
+    margin-top: 15px;
+    line-break: anywhere;
+}
+
+@media only screen and (max-width: 630px) {
+}
+
+@media only screen and (max-width: 600px) {
+    .user-info,
+    .post {
+        padding: 20px;
+        min-width: 100%;
+    }
+
+    .user-info {
+        min-height: 350px;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+    .user-info,
+    .post {
+        min-width: unset;
+    }
+
+    .user-info {
+        min-height: unset;
+    }
+}

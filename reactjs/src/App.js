@@ -9,13 +9,14 @@ import ProfilePage from "./pages/ProfilePage";
 import UsersListPage from "./pages/UsersListPage";
 import CreateThreadPage from "./pages/CreateThreadPage";
 import ThreadListPage from "./pages/ThreadListPage";
+import FavoritesPage from "./pages/FavoritesPage";
+import SingleThreadPage from "./pages/SingleThreadPage";
 
 import io from "socket.io-client";
 import { useEffect } from "react";
 import http from "./plugins/http";
 import { setUser, setUserName } from "./redux/User";
 import { useDispatch } from "react-redux";
-import FavoritesPage from "./pages/FavoritesPage";
 const socket = io.connect(process.env.REACT_APP_SOCKETS_SERVER);
 
 function App() {
@@ -82,8 +83,8 @@ function App() {
                         element={<FavoritesPage />}
                     />
                     <Route
-                        path={"/thread/:title"}
-                        element={<FavoritesPage />}
+                        path={"/thread/:id"}
+                        element={<SingleThreadPage />}
                     />
                 </Routes>
             </BrowserRouter>

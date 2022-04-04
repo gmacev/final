@@ -59,10 +59,15 @@ const UsersList = () => {
             style={{ opacity: `${getOpacity}` }}
         >
             <div className="box">
-                <h2 className="text-center mb-4">Registered users</h2>
+                <h2 className="text-center mb-4">
+                    {getUsers && getUsers.length > 0
+                        ? "Registered users"
+                        : "No users found"}
+                </h2>
                 {/*{(getAllUsers && getAllUsers.length > 0) && <Search initialData={getAllUsers} setResults={setUsers} placeholder={"El. paštas arba tel. nr."} field1={"email"} field2={"phoneNumber"} collection={"userDb"}/>}*/}
                 <div className="user-cards">
-                    {getUsers && getUsers.length > 0 ? (
+                    {getUsers &&
+                        getUsers.length > 0 &&
                         getUsers.map((user, index) => {
                             return (
                                 <User
@@ -70,10 +75,7 @@ const UsersList = () => {
                                     key={index}
                                 />
                             );
-                        })
-                    ) : (
-                        <h5 className="text-center">No users found</h5>
-                    )}
+                        })}
                 </div>
                 <PaginationGlobal
                     activePage={activePage}

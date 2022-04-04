@@ -68,7 +68,7 @@ const RichEditor = ({ getValue, setValue }) => {
     return (
         <div className="w-100">
             <div
-                className="box2 p-3"
+                className="box p-3"
                 style={{ minHeight: "350px" }}
             >
                 <Slate
@@ -167,7 +167,7 @@ const RichEditor = ({ getValue, setValue }) => {
 };
 
 const isImageUrl = (url) => {
-    if (!url || !isUrl(url)) return false;
+    if ((!url || !isUrl(url)) && !url.includes("data:image/")) return false;
     const ext = new URL(url).pathname.split(".").pop();
     return imageExtensions.includes(ext);
 };

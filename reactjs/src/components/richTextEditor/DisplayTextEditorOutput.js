@@ -22,6 +22,7 @@ const DisplayTextEditorOutput = ({ getValue, randomNum }) => {
                 <Slate
                     editor={editor}
                     value={getValue}
+                    onChange={() => {}}
                 >
                     <Editable
                         readOnly

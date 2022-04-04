@@ -44,7 +44,8 @@ input:focus {
 input,
 .button,
 .box,
-.box2 {
+.box2,
+.box3 {
     border-radius: 4px;
     border: unset;
 }
@@ -87,6 +88,7 @@ a {
 
 .box3 {
     border: 1px solid #c0c0c0;
+    background-color: #eeeeee;
 }
 
 .user-avatar {
@@ -130,6 +132,25 @@ p {
     max-width: 300px;
     text-align: center;
     color: #006dff !important;
+}
+
+.flex1 {
+    flex: 1;
+}
+.flex2 {
+    flex: 2;
+}
+.flex3 {
+    flex: 3;
+}
+.flex4 {
+    flex: 4;
+}
+.flex5 {
+    flex: 5;
+}
+.flex6 {
+    flex: 6;
 }
 
 ::-webkit-scrollbar {

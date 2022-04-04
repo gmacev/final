@@ -38,7 +38,7 @@ const Profile = () => {
             setOpacity(1);
         }, 100);
 
-        http.get(`user/${id}`)
+        http.get(`user/${id}/0`)
             .then((res) => {
                 if (res.error) {
                     console.log(res.error);
@@ -51,9 +51,7 @@ const Profile = () => {
             })
             .catch((err) => {
                 console.log(err);
-                setInRequest(false);
             });
-        //threadGetCall("posts", setPosts, "posts");
 
         return () => {
             clearTimeout(timeOut);
@@ -92,8 +90,12 @@ const Profile = () => {
             });
     }
 
-    function threadGetCall(route, state, resValue) {
-        http.get(`${route}/0/${itemsPerPage}/1/${getUser.email}`)
+    function threadGetCall(route, state, resValue, threadId = "") {
+        http.get(
+            `${route}/0/${itemsPerPage}/1/${getUser.email}/${
+                route === "posts" ? "0" : ""
+            }`
+        )
             .then((res) => {
                 if (res.error) {
                     console.log(res.error);
@@ -195,7 +197,7 @@ const Profile = () => {
                                 <h6>{getUser.email}</h6>
                             )}
                             <p className="mt-2">
-                                <b>Registered on:</b>{" "}
+                                <b>Registered:</b>{" "}
                                 {new Date(
                                     getUser.registeredTimeStamp
                                 ).toLocaleString([], {
@@ -205,10 +207,10 @@ const Profile = () => {
                                 })}
                             </p>
                             <p>
-                                <b>Thread count:</b> {getUser.threadCount}
+                                <b>Threads:</b> {getUser.threadCount}
                             </p>
                             <p>
-                                <b>Post count:</b> {getUser.postCount}
+                                <b>Posts:</b> {getUser.postCount}
                             </p>
                         </div>
                     </div>
@@ -296,56 +298,51 @@ const Profile = () => {
                         Posts
                     </div>
                 </div>
-
-                <div className="mt-3 box2 user-threads">
-                    {getActiveTab === 0 ? (
-                        <div>
-                            {getThreads && getThreads.length > 0 ? (
-                                <>
-                                    <div className="thread-in-list header">
-                                        <div className="place-holder" />
-                                        <h5>Thread</h5>
-                                        <h5 className="text-center">Posts</h5>
-                                        <h5 className="text-center">
-                                            Last reply
-                                        </h5>
-                                    </div>
-                                    {getThreads.map((thread, index) => {
-                                        return (
-                                            <ThreadInList
-                                                thread={thread}
-                                                key={index}
-                                            />
-                                        );
-                                    })}
-                                </>
-                            ) : (
-                                <h4 className="text-center p-4">
-                                    No threads created
-                                </h4>
-                            )}
-                        </div>
-                    ) : (
-                        <div>
-                            {getPosts && getPosts.length > 0 ? (
-                                <>
-                                    {getPosts.map((post, index) => {
-                                        return (
-                                            <PostInList
-                                                post={post}
-                                                key={index}
-                                            />
-                                        );
-                                    })}
-                                </>
-                            ) : (
-                                <h4 className="text-center p-4">
-                                    No posts created
-                                </h4>
-                            )}
-                        </div>
-                    )}
-                </div>
+                {getActiveTab === 0 ? (
+                    <>
+                        {getThreads && getThreads.length > 0 ? (
+                            <div className="box2 user-threads">
+                                <div className="thread-in-list header">
+                                    <div className="place-holder" />
+                                    <h5>Thread</h5>
+                                    <h5 className="text-center">Posts</h5>
+                                    <h5 className="text-center">Last reply</h5>
+                                </div>
+                                {getThreads.map((thread, index) => {
+                                    return (
+                                        <ThreadInList
+                                            thread={thread}
+                                            key={index}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <h4 className="text-center p-4">
+                                No threads created
+                            </h4>
+                        )}
+                    </>
+                ) : (
+                    <div>
+                        {getPosts && getPosts.length > 0 ? (
+                            <div className="box2 user-threads">
+                                {getPosts.map((post, index) => {
+                                    return (
+                                        <PostInList
+                                            post={post}
+                                            key={index}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <h4 className="text-center p-4">
+                                No posts created
+                            </h4>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
