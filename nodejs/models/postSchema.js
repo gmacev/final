@@ -10,6 +10,10 @@ const postSchema = new Schema({
         type: String,
         required: true,
     },
+    threadTitle: {
+        type: String,
+        required: true,
+    },
     post: {
         type: Array,
         required: true,

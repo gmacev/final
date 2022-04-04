@@ -21,6 +21,7 @@ module.exports = {
 
             threadPost.owner = owner.toLowerCase();
             threadPost.threadId = thread._id;
+            threadPost.threadTitle = title;
             threadPost.post = post;
             threadPost.createdTimeStamp = Date.now();
 

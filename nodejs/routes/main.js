@@ -17,7 +17,12 @@ const {
     getThreads,
     getThread,
 } = require("../controllers/threadController");
-const { createPost } = require("../controllers/postController");
+
+const {
+    createPost,
+    getPosts,
+    getPost,
+} = require("../controllers/postController");
 
 const userMiddleware = require("../middleware/userMiddleWare");
 const threadMiddleware = require("../middleware/threadMiddleware");
@@ -67,6 +72,9 @@ router.get("/user/:_id", getUser);
 
 router.get("/threads/:count/:limit/:page/:owner", getThreads);
 router.get("/thread/:_id", getThread);
+
+router.get("/posts/:count/:limit/:page/:owner", getPosts);
+router.get("/post/:_id", getPost);
 
 router.post(
     "/create-thread",
