@@ -11,8 +11,12 @@ const threadSchema = new Schema({
         required: true,
     },
     createdTimeStamp: {
-        type: Date,
+        type: Number,
         required: true,
+    },
+    lastPostTimeStamp: {
+        type: Number,
+        default: 0,
     },
     postCount: {
         type: Number,

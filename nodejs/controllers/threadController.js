@@ -41,4 +41,34 @@ module.exports = {
             return res.send({ error: true, message: error });
         }
     },
+
+    getThreads: async (req, res) => {
+        let { count, limit, page } = req.params;
+
+        if (!/\d/.test(count) || !/\d/.test(limit) || !/\d/.test(page))
+            return res.send({ error: true, message: "Error" });
+
+        count = Number(count);
+        limit = Number(limit);
+        page = Number(page) - 1;
+
+        let threads = [],
+            total = 0;
+
+        if (count === 0) {
+            threads = await models["threadModel"]
+                .find({}, {}, { skip: limit * page, limit: limit })
+                .sort({ _id: -1 });
+        } else total = await models["threadModel"].count();
+
+        return res.send({ error: false, threads: threads, total: total });
+    },
+
+    getThread: async (req, res) => {
+        const { _id } = req.params;
+
+        const thread = await models["threadModel"].findOne({ _id: _id });
+
+        return res.send({ error: false, thread: thread });
+    },
 };

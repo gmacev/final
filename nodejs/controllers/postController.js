@@ -19,7 +19,7 @@ module.exports = {
             const response = await threadPost.save();
 
             await models["threadModel"].findOneAndUpdate(
-                { email: owner.toLowerCase() },
+                { _id: threadId },
                 { $inc: { postCount: 1 } }
             );
 
@@ -28,9 +28,14 @@ module.exports = {
                 { $inc: { postCount: 1 } }
             );
 
+            await models["threadModel"].findOneAndUpdate(
+                { _id: threadId },
+                { $set: { lastPostTimeStamp: Date.now() } }
+            );
+
             return res.send({
                 error: false,
-                message: "Thread created successfully",
+                message: "Post created successfully",
                 _id: response._id,
             });
         } catch (error) {

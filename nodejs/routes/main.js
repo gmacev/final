@@ -12,7 +12,11 @@ const {
     changeUsername,
 } = require("../controllers/userController");
 
-const { createThread } = require("../controllers/threadController");
+const {
+    createThread,
+    getThreads,
+    getThread,
+} = require("../controllers/threadController");
 const { createPost } = require("../controllers/postController");
 
 const userMiddleware = require("../middleware/userMiddleWare");
@@ -60,6 +64,9 @@ router.post(
 
 router.get("/users/:count/:limit/:page", getUsers);
 router.get("/user/:_id", getUser);
+
+router.get("/threads/:count/:limit/:page", getThreads);
+router.get("/thread/:_id", getThread);
 
 router.post(
     "/create-thread",

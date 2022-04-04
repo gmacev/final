@@ -15,7 +15,7 @@ const postSchema = new Schema({
         required: true,
     },
     createdTimeStamp: {
-        type: Date,
+        type: Number,
         required: true,
     },
 });
