@@ -3,9 +3,9 @@ import ThreadList from "../components/thread/ThreadList";
 
 const ThreadListPage = () => {
     return (
-        <div>
+        <>
             <ThreadList />
-        </div>
+        </>
     );
 };
 

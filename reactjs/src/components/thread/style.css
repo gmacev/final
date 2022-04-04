@@ -48,7 +48,12 @@
 }
 
 .thread-in-list-title {
+    transition: all 150ms ease-in;
     width: 100%;
+}
+
+.thread-in-list-title:hover {
+    color: #00243c !important;
 }
 
 .created-on {
@@ -61,6 +66,10 @@
 
 .thread-title {
     margin: 0;
+}
+
+.login-link {
+    text-decoration: underline !important;
 }
 
 @media only screen and (max-width: 600px) {
@@ -94,13 +103,9 @@
     }
 
     .thread-in-list-title {
-        color: #00528a;
-        font-family: "circular", Arial, "Helvetica Neue", Helvetica, sans-serif;
-        font-weight: 300 !important;
-        text-shadow: 3px 3px 2px rgb(51 115 255 / 10%);
         margin: 0 !important;
         z-index: 45;
-        word-break: break-all;
+        word-break: break-word;
         min-width: 50px;
     }
 

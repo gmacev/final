@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import http from "../../plugins/http";
-import { itemsPerPage } from "../pagination/PaginationGlobal";
-import { useParams } from "react-router-dom";
+import PaginationGlobal, { itemsPerPage } from "../pagination/PaginationGlobal";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import PostInThread from "../post/PostInThread";
 import TextEditor from "../richTextEditor/TextEditor";
 import Button from "../button/Button";
@@ -24,12 +24,15 @@ const SingleThread = () => {
     const [getInRequest, setInRequest] = useState(false);
     const [getResponse, setResponse] = useState("");
     const [getIsInFavorites, setIsInFavorites] = useState(false);
-
+    let [activePage, setActivePage] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
     let [getOutPut, setOutPut] = useState(initialOutput);
 
     const mountedRef = useRef(true);
 
     const { id } = useParams();
+
+    const goToPage = useNavigate();
 
     useEffect(() => {
         http.get(`thread/${id}`)
@@ -47,23 +50,45 @@ const SingleThread = () => {
                 console.log(err);
             });
 
-        http.get(`posts/0/${itemsPerPage}/1/0/${id}`)
-            .then((res) => {
-                if (res.error) {
-                    console.log(res.error);
-                } else {
-                    setOpacity(1);
-                    setPosts(res.posts.reverse());
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        loadPosts(false);
+        loadPosts(true);
 
         return () => {
             mountedRef.current = false;
         };
     }, []);
+
+    const handlePageChange = (newActivePage) => {
+        activePage = newActivePage;
+        setActivePage(newActivePage);
+        goToPage(`/thread/${id}/1`);
+        loadPosts();
+    };
+
+    function loadPosts(totalCount) {
+        if (!totalCount) {
+            http.get(`posts/0/${itemsPerPage}/${activePage}/0/${id}`)
+                .then((res) => {
+                    if (res.error) {
+                        console.log(res.error);
+                    } else {
+                        setOpacity(1);
+                        setPosts(res.posts.reverse());
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } else {
+            http.get(`posts/1/${itemsPerPage}/${activePage}/0/${id}`)
+                .then((res) => {
+                    setTotalCount(res.total);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }
 
     function handleFavorites() {
         let favoriteThreads = [];
@@ -168,7 +193,7 @@ const SingleThread = () => {
                 {getPosts && getPosts.length > 0 && (
                     <>
                         <div className="d-flex justify-content-between">
-                            <div className="p-3 text-center">
+                            <div className="text-center">
                                 <h2 className="thread-title">
                                     {getThread.title}
                                 </h2>
@@ -191,26 +216,46 @@ const SingleThread = () => {
                                 key={index}
                             />
                         ))}
-                        <div className="mt-4 d-flex flex-column align-items-center">
-                            <TextEditor
-                                getOutput={getOutPut}
-                                setOutput={setOutPut}
-                            />
-                            <Button
-                                onClick={createPost}
-                                className={`mt-3 ${getInRequest && "disabled"}`}
-                            >
-                                Create
-                            </Button>
-                            {getResponse && getResponse.length > 0 && (
-                                <div
-                                    className="alert alert-light mt-3"
-                                    role="alert"
+                        {user.email ? (
+                            <div className="mt-4 d-flex flex-column align-items-center">
+                                <TextEditor
+                                    getOutput={getOutPut}
+                                    setOutput={setOutPut}
+                                />
+                                <Button
+                                    onClick={createPost}
+                                    className={`mt-3 ${
+                                        getInRequest && "disabled"
+                                    }`}
                                 >
-                                    {getResponse}
-                                </div>
-                            )}
-                        </div>
+                                    Create
+                                </Button>
+                                {getResponse && getResponse.length > 0 && (
+                                    <div
+                                        className="alert alert-light mt-3"
+                                        role="alert"
+                                    >
+                                        {getResponse}
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <h6 className="text-center m-0 mt-4">
+                                Please{" "}
+                                <Link
+                                    to={"/login"}
+                                    className="login-link"
+                                >
+                                    login
+                                </Link>{" "}
+                                to reply
+                            </h6>
+                        )}
+                        <PaginationGlobal
+                            activePage={activePage}
+                            handlePageChange={handlePageChange}
+                            totalCount={totalCount}
+                        />
                     </>
                 )}
             </div>

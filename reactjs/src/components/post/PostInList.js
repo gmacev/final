@@ -13,7 +13,7 @@ const PostInList = ({ post }) => {
             <div className="box2 thread-in-list post-in-list">
                 <div className="">
                     <Link
-                        to={`/thread/${post.threadId}#${post._id}`}
+                        to={`/thread/${post.threadId}/1`}
                         className="thread-in-list-title-wrapper thread-in-list-title"
                     >
                         {post.threadTitle}

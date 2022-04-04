@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Exo&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Proza+Libre&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap");
 
 @font-face {
     font-family: "circular";
@@ -22,8 +22,7 @@ h4,
 h5,
 h6 {
     color: #00528a;
-    font-family: "circular", Arial, "Helvetica Neue", Helvetica, sans-serif;
-    font-weight: 300 !important;
+    font-family: "Open Sans", sans-serif;
     text-shadow: 3px 3px 2px rgba(51, 115, 255, 0.1);
 }
 

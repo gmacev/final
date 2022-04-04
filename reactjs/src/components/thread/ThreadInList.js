@@ -66,11 +66,8 @@ const ThreadInList = ({ thread }) => {
                             <AiOutlineHeart />
                         )}
                     </div>
-                    <Link
-                        to={`/thread/${thread._id}`}
-                        className="thread-in-list-title"
-                    >
-                        {thread.title}
+                    <Link to={`/thread/${thread._id}/1`}>
+                        <h6 className="thread-in-list-title">{thread.title}</h6>
                     </Link>
                 </div>
                 <span className="created-on">

@@ -83,7 +83,7 @@ function App() {
                         element={<FavoritesPage />}
                     />
                     <Route
-                        path={"/thread/:id"}
+                        path={"/thread/:id/:page"}
                         element={<SingleThreadPage />}
                     />
                 </Routes>

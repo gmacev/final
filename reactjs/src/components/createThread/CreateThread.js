@@ -74,7 +74,7 @@ const CreateThread = () => {
                     setResponse(res.message);
                 } else {
                     setResponse(res.message);
-                    navigate(`/thread/${res._id}`);
+                    navigate(`/thread/${res._id}/1`);
                 }
             })
             .catch((err) => {

@@ -64,7 +64,6 @@ const UsersList = () => {
                         ? "Registered users"
                         : "No users found"}
                 </h2>
-                {/*{(getAllUsers && getAllUsers.length > 0) && <Search initialData={getAllUsers} setResults={setUsers} placeholder={"El. paštas arba tel. nr."} field1={"email"} field2={"phoneNumber"} collection={"userDb"}/>}*/}
                 <div className="user-cards">
                     {getUsers &&
                         getUsers.length > 0 &&
