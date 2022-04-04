@@ -10,6 +10,8 @@ import { setUserAvatar, setShowEmail, setUserName } from "../../redux/User";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Form } from "react-bootstrap";
+import { itemsPerPage } from "../pagination/PaginationGlobal";
+import ThreadInList from "../thread/ThreadInList";
 
 const Profile = () => {
     const user = useSelector((state) => state.user.value);
@@ -19,8 +21,10 @@ const Profile = () => {
     const [getInRequest, setInRequest] = useState(false);
     const [getResponse, setResponse] = useState("");
     const [getResponse2, setResponse2] = useState("");
-    const [getUser, setUser] = useState({});
+    let [getUser, setUser] = useState({});
     const [getShowUpdateInput, setShowUpdateInput] = useState(false);
+    const [getThreads, setThreads] = useState([]);
+    const [getPosts, setPosts] = useState([]);
 
     const dispatch = useDispatch();
     const usernameRef = useRef();
@@ -31,19 +35,23 @@ const Profile = () => {
     useEffect(() => {
         const timeOut = setTimeout(() => {
             setOpacity(1);
-
-            http.get(`user/${id}`)
-                .then((res) => {
-                    if (res.error) {
-                        console.log(res.error);
-                    } else {
-                        setUser(res.user);
-                    }
-                })
-                .catch((err) => {
-                    setInRequest(false);
-                });
         }, 100);
+
+        http.get(`user/${id}`)
+            .then((res) => {
+                if (res.error) {
+                    console.log(res.error);
+                } else {
+                    getUser = res.user;
+                    setUser(res.user);
+                    threadGetCall("threads", setThreads, "threads");
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                setInRequest(false);
+            });
+        //threadGetCall("posts", setPosts, "posts");
 
         return () => {
             clearTimeout(timeOut);
@@ -51,7 +59,7 @@ const Profile = () => {
         };
     }, []);
 
-    function postCall(route, state, resValue, prop, value, responseSet) {
+    function userPostCall(route, state, resValue, prop, value, responseSet) {
         responseSet("");
 
         http.post(
@@ -82,6 +90,20 @@ const Profile = () => {
             });
     }
 
+    function threadGetCall(route, state, resValue) {
+        http.get(`${route}/0/${itemsPerPage}/1/${getUser.email}`)
+            .then((res) => {
+                if (res.error) {
+                    console.log(res.error);
+                } else {
+                    state(res[resValue]);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     return (
         <div
             className="main"
@@ -99,17 +121,19 @@ const Profile = () => {
                             {!getShowUpdateInput ? (
                                 <div className="display-name d-flex gap-1">
                                     <h2>{getUser.username}</h2>
-                                    <div
-                                        className="edit-display-name-btn"
-                                        onClick={() =>
-                                            setShowUpdateInput(
-                                                !getShowUpdateInput
-                                            )
-                                        }
-                                        title="Change display name"
-                                    >
-                                        <BiMessageSquareEdit />
-                                    </div>
+                                    {user && user._id === id && (
+                                        <div
+                                            className="edit-display-name-btn"
+                                            onClick={() =>
+                                                setShowUpdateInput(
+                                                    !getShowUpdateInput
+                                                )
+                                            }
+                                            title="Change display name"
+                                        >
+                                            <BiMessageSquareEdit />
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 user &&
@@ -135,7 +159,7 @@ const Profile = () => {
                                                 onClick={() => {
                                                     setShowUpdateInput(false);
 
-                                                    postCall(
+                                                    userPostCall(
                                                         "change-username",
                                                         setUserName,
                                                         "username",
@@ -203,7 +227,7 @@ const Profile = () => {
                                 </div>
                                 <Button
                                     onClick={() =>
-                                        postCall(
+                                        userPostCall(
                                             "change-avatar",
                                             setUserAvatar,
                                             "avatar",
@@ -226,7 +250,7 @@ const Profile = () => {
                                     label="Show email publicly"
                                     checked={user.showEmail}
                                     onChange={() =>
-                                        postCall(
+                                        userPostCall(
                                             "change-show-email",
                                             setShowEmail,
                                             "showEmail",
@@ -269,8 +293,37 @@ const Profile = () => {
                     </div>
                 </div>
 
-                <div className="mt-3">
-                    {getActiveTab === 0 ? <div>asfasf</div> : <div>dg4sdf</div>}
+                <div className="mt-3 box2 user-threads">
+                    {getActiveTab === 0 ? (
+                        <div>
+                            {getThreads && getThreads.length > 0 ? (
+                                <>
+                                    <div className="thread-in-list header">
+                                        <div className="place-holder" />
+                                        <h5>Thread</h5>
+                                        <h5 className="text-center">Posts</h5>
+                                        <h5 className="text-center">
+                                            Last reply
+                                        </h5>
+                                    </div>
+                                    {getThreads.map((thread, index) => {
+                                        return (
+                                            <ThreadInList
+                                                thread={thread}
+                                                key={index}
+                                            />
+                                        );
+                                    })}
+                                </>
+                            ) : (
+                                <h4 className="text-center p-4">
+                                    No threads created
+                                </h4>
+                            )}
+                        </div>
+                    ) : (
+                        <div>dg4sdf</div>
+                    )}
                 </div>
             </div>
         </div>

@@ -167,15 +167,12 @@ const RichEditor = ({ getValue, setValue }) => {
 };
 
 const isImageUrl = (url) => {
-    if (!url) return false;
-    if (!isUrl(url)) return false;
+    if (!url || !isUrl(url)) return false;
     const ext = new URL(url).pathname.split(".").pop();
     return imageExtensions.includes(ext);
 };
 
 const insertImage = (editor, url, getBtnValue, setBtnValue) => {
-    if (!url) return;
-
     const { selection } = editor;
     const image = createImageNode("Image", url, editor);
 
@@ -433,7 +430,7 @@ const InsertImageButton = ({
                 onMouseDown={(event) => {
                     event.preventDefault();
                     const url = window.prompt("Enter the URL of the image:");
-                    if (!url || !isImageUrl(url)) return;
+                    if (!isImageUrl(url)) return;
                     insertImage(editor, url, getBtnValue, setBtnValue);
                 }}
                 className={`button editor-button ${

@@ -5,21 +5,38 @@ import { useNavigate } from "react-router-dom";
 import ThreadInList from "./ThreadInList";
 import "./style.css";
 
-const ThreadList = () => {
+const ThreadList = ({ favorites }) => {
     const [getAllThreads, setAllThreads] = useState([]);
     const [getThreads, setThreads] = useState([]);
     let [activePage, setActivePage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const [getOpacity, setOpacity] = useState(0);
 
+    console.log(favorites);
+
     const goToPage = useNavigate();
     const mountedRef = useRef(true);
 
     useEffect(() => {
-        loadThreads(false);
-        loadThreads(true);
+        let timeOut = null;
+
+        if (favorites === 1) {
+            if (localStorage.getItem("favorite-threads")) {
+                setThreads(
+                    JSON.parse(localStorage.getItem("favorite-threads"))
+                );
+            }
+
+            timeOut = setTimeout(() => {
+                setOpacity(1);
+            }, 100);
+        } else {
+            loadThreads(false);
+            loadThreads(true);
+        }
 
         return () => {
+            clearTimeout(timeOut);
             mountedRef.current = false;
         };
     }, []);
@@ -33,17 +50,18 @@ const ThreadList = () => {
 
     function loadThreads(totalCount) {
         if (!totalCount) {
-            http.get(`threads/0/${itemsPerPage}/${activePage}`)
+            http.get(`threads/0/${itemsPerPage}/${activePage}/0`)
                 .then((res) => {
                     setOpacity(1);
                     setThreads(res.threads);
+                    console.log(res.threads);
                     setAllThreads(res.threads);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         } else {
-            http.get(`threads/1/${itemsPerPage}/${activePage}`)
+            http.get(`threads/1/${itemsPerPage}/${activePage}/0`)
                 .then((res) => {
                     setTotalCount(res.total);
                 })
@@ -59,32 +77,38 @@ const ThreadList = () => {
             style={{ opacity: `${getOpacity}` }}
         >
             <div className="box">
-                <h2 className="text-center mb-4">Threads</h2>
+                <h2 className="text-center mb-4">
+                    {getThreads && getThreads.length > 0
+                        ? "Threads"
+                        : "No threads found"}
+                </h2>
                 <div className="box2 user-threads">
-                    <div className="thread-in-list header">
-                        <div className="place-holder" />
-                        <h5>Thread</h5>
-                        <h5 className="text-center">Posts</h5>
-                        <h5 className="text-center">Last reply</h5>
-                    </div>
-                    {getThreads && getThreads.length > 0 ? (
-                        getThreads.map((thread, index) => {
-                            return (
-                                <ThreadInList
-                                    thread={thread}
-                                    key={index}
-                                />
-                            );
-                        })
-                    ) : (
-                        <h5 className="text-center">No threads found</h5>
+                    {getThreads && getThreads.length > 0 && (
+                        <>
+                            <div className="thread-in-list header">
+                                <div className="place-holder" />
+                                <h5>Thread</h5>
+                                <h5 className="text-center">Posts</h5>
+                                <h5 className="text-center">Last reply</h5>
+                            </div>
+                            {getThreads.map((thread, index) => {
+                                return (
+                                    <ThreadInList
+                                        thread={thread}
+                                        key={index}
+                                    />
+                                );
+                            })}
+                        </>
                     )}
                 </div>
-                <PaginationGlobal
-                    activePage={activePage}
-                    handlePageChange={handlePageChange}
-                    totalCount={totalCount}
-                />
+                {favorites !== 1 && (
+                    <PaginationGlobal
+                        activePage={activePage}
+                        handlePageChange={handlePageChange}
+                        totalCount={totalCount}
+                    />
+                )}
             </div>
         </div>
     );

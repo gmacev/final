@@ -9,11 +9,12 @@ import {
     HiSearch,
     HiUserCircle,
 } from "react-icons/hi";
+import { MdCreateNewFolder, MdFavorite } from "react-icons/md";
+
 import { useDispatch, useSelector } from "react-redux";
 import { resetUserState } from "../../redux/User";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../button/Button";
-import { MdCreateNewFolder } from "react-icons/md";
 
 const Toolbar = () => {
     const { email, _id } = useSelector((state) => state.user.value);
@@ -95,7 +96,9 @@ const Toolbar = () => {
             </Link>
             <Link
                 to={"/users/1"}
-                className={`${pathname === "/users" && "toolbar-active-item"}`}
+                className={`${
+                    pathname.includes("/users/") && "toolbar-active-item"
+                }`}
             >
                 <HiUsers />
                 <p>Users</p>
@@ -129,6 +132,16 @@ const Toolbar = () => {
             {!email ? (
                 <>
                     <Link
+                        to={"/favorite-threads/1"}
+                        className={`${
+                            pathname.includes("/favorite-threads/") &&
+                            "toolbar-active-item"
+                        }`}
+                    >
+                        <MdFavorite />
+                        <p>Favorites</p>
+                    </Link>
+                    <Link
                         to={"/register"}
                         className={`${
                             pathname === "/register" && "toolbar-active-item"
@@ -149,13 +162,34 @@ const Toolbar = () => {
                 </>
             ) : (
                 <>
-                    <Link to={"/new-thread"}>
+                    <Link
+                        to={"/new-thread"}
+                        className={`${
+                            pathname === "/new-thread" && "toolbar-active-item"
+                        }`}
+                    >
                         <MdCreateNewFolder />
                         <p>New thread</p>
                     </Link>
-                    <Link to={`/profile/${_id}`}>
+                    <Link
+                        to={`/profile/${_id}`}
+                        className={`${
+                            pathname.includes("/profile/") &&
+                            "toolbar-active-item"
+                        }`}
+                    >
                         <HiUserCircle />
                         <p>Profile</p>
+                    </Link>
+                    <Link
+                        to={"/favorite-threads/1"}
+                        className={`${
+                            pathname.includes("/favorite-threads/") &&
+                            "toolbar-active-item"
+                        }`}
+                    >
+                        <MdFavorite />
+                        <p>Favorites</p>
                     </Link>
                     <div onClick={logOut}>
                         <HiLogout />

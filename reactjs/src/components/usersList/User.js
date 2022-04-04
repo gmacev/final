@@ -10,7 +10,12 @@ const User = ({ user }) => {
                 style={{ backgroundImage: `url(${user.avatar})` }}
             />
             <div className="p-2">
-                <h6 className="text-center">{user.username}</h6>
+                <Link
+                    to={`/profile/${user._id}`}
+                    className="text-center d-block mt-2"
+                >
+                    <h6 className="text-center">{user.username}</h6>
+                </Link>
                 <p>
                     <b>Joined: </b>
                     {new Date(user.registeredTimeStamp).toLocaleString([], {
@@ -25,12 +30,6 @@ const User = ({ user }) => {
                 <p>
                     <b>Post count:</b> {user.postCount}
                 </p>
-                <Link
-                    to={`/profile/${user._id}`}
-                    className="text-center d-block mt-2"
-                >
-                    Visit profile
-                </Link>
             </div>
         </div>
     );

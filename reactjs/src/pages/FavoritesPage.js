@@ -1,12 +1,12 @@
 import React from "react";
 import ThreadList from "../components/thread/ThreadList";
 
-const HomePage = () => {
+const FavoritesPage = () => {
     return (
         <>
-            <ThreadList favorites={0} />
+            <ThreadList favorites={1} />
         </>
     );
 };
 
-export default HomePage;
+export default FavoritesPage;

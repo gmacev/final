@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import http from "./plugins/http";
 import { setUser, setUserName } from "./redux/User";
 import { useDispatch } from "react-redux";
+import FavoritesPage from "./pages/FavoritesPage";
 const socket = io.connect(process.env.REACT_APP_SOCKETS_SERVER);
 
 function App() {
@@ -75,6 +76,10 @@ function App() {
                     <Route
                         path={"/threads/:page"}
                         element={<ThreadListPage />}
+                    />
+                    <Route
+                        path={"/favorite-threads/:page"}
+                        element={<FavoritesPage />}
                     />
                 </Routes>
             </BrowserRouter>

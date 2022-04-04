@@ -26,6 +26,7 @@
 .place-holder {
     width: 30px;
     height: 30px;
+    z-index: -1;
 }
 
 .text-on-break {
@@ -35,12 +36,30 @@
     margin: 0;
 }
 
+.thread-in-list-info-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
 .thread-in-list-title-wrapper {
     display: flex;
     gap: 1.5rem;
+    width: 250px;
 }
 
-@media only screen and (max-width: 700px) {
+.thread-in-list-title {
+    width: 100%;
+}
+
+.created-on {
+    font-size: 12px;
+    width: 100%;
+    min-width: 200px;
+    margin-top: 5px;
+    margin-left: 49px;
+}
+
+@media only screen and (max-width: 600px) {
     .thread-in-list {
         display: flex;
         flex-direction: column;
@@ -57,6 +76,12 @@
 
     .place-holder {
         display: none;
+    }
+
+    .created-on {
+        min-width: 50px;
+        margin-left: 0;
+        text-align: center;
     }
 
     .thread-in-list h5 {
@@ -85,6 +110,7 @@
         justify-content: center;
         flex-wrap: wrap;
         width: 100%;
+        text-align: center;
     }
 
     .user-threads {

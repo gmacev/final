@@ -73,9 +73,10 @@
     }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
     .profile-avatar {
         width: 100%;
+        max-width: 350px;
     }
 
     .profile-info {

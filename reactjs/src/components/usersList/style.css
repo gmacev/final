@@ -28,7 +28,7 @@
     }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
     .user-card-in-list {
         width: 140px;
     }

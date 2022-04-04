@@ -33,7 +33,7 @@
     font-size: 23px;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
     .editor-button {
         padding: 5px;
     }

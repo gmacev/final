@@ -95,7 +95,7 @@ a {
 
 .main {
     margin: 130px 120px 50px 120px;
-    transition: all 500ms;
+    transition: all 600ms;
     opacity: 0;
     width: calc(100vw - 180px);
     max-width: 1200px;
@@ -144,11 +144,17 @@ p {
     background: rgb(87, 102, 108);
 }
 
-@media only screen and (max-width: 500px) {
-    .main {
-        margin: 15px 15px 15px 80px;
+@media only screen and (max-width: 800px) {
+    .main,
+    .login,
+    .register,
+    .create-thread {
+        margin: 130px 0 15px 0;
+        width: calc(100% - 50px) !important;
     }
+}
 
+@media only screen and (max-width: 600px) {
     .login,
     .register,
     .create-thread {
@@ -157,9 +163,7 @@ p {
         justify-content: center;
         align-items: center;
     }
-}
 
-@media only screen and (max-width: 460px) {
     input {
         width: 100%;
     }
