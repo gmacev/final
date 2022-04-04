@@ -122,9 +122,15 @@ module.exports = {
     },
 
     getUser: async (req, res) => {
-        const { _id } = req.params;
+        const { _id, email } = req.params;
 
-        const user = await models["userModel"].findOne({ _id: _id });
+        let user = {};
+
+        if (_id !== "0") {
+            user = await models["userModel"].findOne({ _id: _id });
+        } else if (email !== "0") {
+            user = await models["userModel"].findOne({ email: email });
+        }
 
         user.password = undefined;
 

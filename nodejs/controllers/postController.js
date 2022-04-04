@@ -19,6 +19,8 @@ module.exports = {
                 { title: 1 }
             );
 
+            console.log(">>>>>>>>>>>>>>>>>>>>", threadId, threadTitle);
+
             threadPost.threadTitle = threadTitle.title;
             threadPost.post = post;
             threadPost.createdTimeStamp = Date.now();
@@ -43,7 +45,7 @@ module.exports = {
             return res.send({
                 error: false,
                 message: "Post created successfully",
-                _id: response._id,
+                post: response,
             });
         } catch (error) {
             console.log(error);
@@ -52,7 +54,7 @@ module.exports = {
     },
 
     getPosts: async (req, res) => {
-        let { count, limit, page, owner } = req.params;
+        let { count, limit, page, owner, threadId } = req.params;
 
         if (!/\d/.test(count) || !/\d/.test(limit) || !/\d/.test(page))
             return res.send({ error: true, message: "Error" });
@@ -68,6 +70,8 @@ module.exports = {
 
         if (owner !== "0") {
             filterQuery = { owner: owner };
+        } else if (threadId !== "0") {
+            filterQuery = { threadId: threadId };
         }
 
         if (count === 0) {

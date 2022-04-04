@@ -68,12 +68,12 @@ router.post(
 );
 
 router.get("/users/:count/:limit/:page", getUsers);
-router.get("/user/:_id", getUser);
+router.get("/user/:_id/:email", getUser);
 
 router.get("/threads/:count/:limit/:page/:owner", getThreads);
 router.get("/thread/:_id", getThread);
 
-router.get("/posts/:count/:limit/:page/:owner", getPosts);
+router.get("/posts/:count/:limit/:page/:owner/:threadId", getPosts);
 router.get("/post/:_id", getPost);
 
 router.post(
