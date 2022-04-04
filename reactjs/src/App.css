@@ -1,11 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Exo&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap");
 
-@font-face {
-    font-family: "circular";
-    src: url("fonts/circular-book.woff2") format("woff2");
-}
-
 body {
     font-family: "Exo", sans-serif;
     background: url("images/bg4.jpg") no-repeat center center fixed;
