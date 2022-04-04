@@ -43,7 +43,7 @@ module.exports = {
     },
 
     getThreads: async (req, res) => {
-        let { count, limit, page } = req.params;
+        let { count, limit, page, owner } = req.params;
 
         if (!/\d/.test(count) || !/\d/.test(limit) || !/\d/.test(page))
             return res.send({ error: true, message: "Error" });
@@ -55,11 +55,19 @@ module.exports = {
         let threads = [],
             total = 0;
 
+        let filterQuery = {};
+
+        if (owner !== "0") {
+            filterQuery = { owner: owner };
+        }
+
         if (count === 0) {
             threads = await models["threadModel"]
-                .find({}, {}, { skip: limit * page, limit: limit })
+                .find(filterQuery, {}, { skip: limit * page, limit: limit })
                 .sort({ _id: -1 });
         } else total = await models["threadModel"].count();
+
+        console.log(threads, filterQuery, owner, total);
 
         return res.send({ error: false, threads: threads, total: total });
     },

@@ -65,7 +65,7 @@ router.post(
 router.get("/users/:count/:limit/:page", getUsers);
 router.get("/user/:_id", getUser);
 
-router.get("/threads/:count/:limit/:page", getThreads);
+router.get("/threads/:count/:limit/:page/:owner", getThreads);
 router.get("/thread/:_id", getThread);
 
 router.post(
