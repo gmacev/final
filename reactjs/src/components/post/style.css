@@ -1,0 +1,4 @@
+.post-in-list {
+    grid-template-columns: 1fr 0.5fr;
+    grid-template-areas: ". .";
+}

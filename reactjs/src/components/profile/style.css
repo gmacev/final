@@ -3,18 +3,30 @@
     gap: 30px;
 }
 
-.profile-info {
+.profile-info h2 {
+    line-break: anywhere;
 }
 
 .profile-avatar {
     width: 250px;
-    border-radius: 2px;
+    border-radius: 3px;
 }
 
 .profile-tabs {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+}
+
+.profile-info-wrapper button {
+    border-top-left-radius: unset;
+    border-bottom-left-radius: unset;
+}
+
+#username-input,
+#image-input {
+    border-top-right-radius: unset;
+    border-bottom-right-radius: unset;
 }
 
 .profile-tab {
@@ -37,14 +49,14 @@
 }
 
 .profile-tab:first-of-type {
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
     border-right: 1px solid #5b94bb;
 }
 
 .profile-tab:last-of-type {
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
 }
 
 .profile-info-wrapper button {
@@ -59,6 +71,10 @@
     color: #5376d4;
     font-size: 18px;
     vertical-align: top;
+}
+
+.post-view {
+    margin-left: 100px;
 }
 
 @media only screen and (max-width: 921px) {
@@ -90,7 +106,7 @@
     .profile-tab {
         width: 100%;
         min-width: unset;
-        border-radius: 2px;
+        border-radius: 3px;
     }
 
     .profile-tab:first-of-type {

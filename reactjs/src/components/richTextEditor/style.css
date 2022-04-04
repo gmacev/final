@@ -24,7 +24,8 @@
     background-color: #00528a !important;
 }
 
-.button-toggled {
+.button-toggled,
+.editor-button:active {
     background-color: #4ac9da !important;
     outline: 1px solid #164949;
 }

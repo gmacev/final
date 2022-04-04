@@ -81,6 +81,10 @@ function App() {
                         path={"/favorite-threads/:page"}
                         element={<FavoritesPage />}
                     />
+                    <Route
+                        path={"/thread/:title"}
+                        element={<FavoritesPage />}
+                    />
                 </Routes>
             </BrowserRouter>
         </div>

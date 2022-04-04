@@ -1,12 +1,14 @@
-import React from "react";
-import ThreadList from "../components/thread/ThreadList";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
-    return (
-        <>
-            <ThreadList favorites={0} />
-        </>
-    );
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        return navigate("/threads/1");
+    });
+
+    return <></>;
 };
 
 export default HomePage;

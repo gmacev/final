@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import { itemsPerPage } from "../pagination/PaginationGlobal";
 import ThreadInList from "../thread/ThreadInList";
+import PostInList from "../post/PostInList";
 
 const Profile = () => {
     const user = useSelector((state) => state.user.value);
@@ -45,6 +46,7 @@ const Profile = () => {
                     getUser = res.user;
                     setUser(res.user);
                     threadGetCall("threads", setThreads, "threads");
+                    threadGetCall("posts", setPosts, "posts");
                 }
             })
             .catch((err) => {
@@ -176,21 +178,23 @@ const Profile = () => {
                                                 Change
                                             </Button>
                                         </div>
-                                        {getResponse && getResponse.length > 0 && (
-                                            <div
-                                                className="alert alert-light mt-3 mb-3"
-                                                role="alert"
-                                            >
-                                                {getResponse}
-                                            </div>
-                                        )}
+                                        {getResponse2 &&
+                                            getResponse2.length > 0 && (
+                                                <div
+                                                    className="alert alert-light mt-3 mb-3"
+                                                    role="alert"
+                                                >
+                                                    {getResponse2}
+                                                </div>
+                                            )}
                                     </div>
                                 )
                             )}
-                            {(getUser.showEmail || user._id === id) && (
-                                <h5>{getUser.email}</h5>
+                            {(getUser.showEmail ||
+                                (user && user._id === id)) && (
+                                <h6>{getUser.email}</h6>
                             )}
-                            <p className="mt-3">
+                            <p className="mt-2">
                                 <b>Registered on:</b>{" "}
                                 {new Date(
                                     getUser.registeredTimeStamp
@@ -322,7 +326,24 @@ const Profile = () => {
                             )}
                         </div>
                     ) : (
-                        <div>dg4sdf</div>
+                        <div>
+                            {getPosts && getPosts.length > 0 ? (
+                                <>
+                                    {getPosts.map((post, index) => {
+                                        return (
+                                            <PostInList
+                                                post={post}
+                                                key={index}
+                                            />
+                                        );
+                                    })}
+                                </>
+                            ) : (
+                                <h4 className="text-center p-4">
+                                    No posts created
+                                </h4>
+                            )}
+                        </div>
                     )}
                 </div>
             </div>

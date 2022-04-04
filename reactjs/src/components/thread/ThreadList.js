@@ -12,8 +12,6 @@ const ThreadList = ({ favorites }) => {
     const [totalCount, setTotalCount] = useState(0);
     const [getOpacity, setOpacity] = useState(0);
 
-    console.log(favorites);
-
     const goToPage = useNavigate();
     const mountedRef = useRef(true);
 
@@ -79,7 +77,9 @@ const ThreadList = ({ favorites }) => {
             <div className="box">
                 <h2 className="text-center mb-4">
                     {getThreads && getThreads.length > 0
-                        ? "Threads"
+                        ? favorites !== 1
+                            ? "Threads"
+                            : "Favorite threads"
                         : "No threads found"}
                 </h2>
                 <div className="box2 user-threads">
