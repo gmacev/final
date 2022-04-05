@@ -12,17 +12,24 @@ import {
 import { MdCreateNewFolder, MdFavorite, MdNotifications } from "react-icons/md";
 
 import { useDispatch, useSelector } from "react-redux";
-import { resetUserState, setNewNotificationsCounter } from "../../redux/User";
+import { resetUserState } from "../../redux/User";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../button/Button";
+import http from "../../plugins/http";
+import { forEach } from "react-bootstrap/ElementChildren";
 
 const Toolbar = () => {
-    const { email, _id, favoritesCounter, newNotificationsCounter } =
-        useSelector((state) => state.user.value);
+    const { email, _id, favoritesCounter } = useSelector(
+        (state) => state.user.value
+    );
 
     const [getShowSearchField, setShowSearchField] = useState(false);
     const [getPrevSearchInputField, setPrevSearchInputField] = useState("");
     const [getShowNotifications, setShowNotifications] = useState(false);
+    const [getNotifications, setNotifications] = useState([]);
+    const [getNewNotificationsCounter, setNewNotificationsCounter] =
+        useState(0);
+    const [getRecheck, setRecheck] = useState(false);
 
     const searchInputRef = useRef();
     const mountedRef = useRef(true);
@@ -40,6 +47,35 @@ const Toolbar = () => {
             mountedRef.current = false;
         };
     }, []);
+
+    useEffect(() => {
+        if (email.length === 0 && localStorage.getItem("email")) {
+            return setRecheck(true);
+        } else if (getRecheck && email.length > 0) {
+            http.get(`notifications/5/${email}`)
+                .then((res) => {
+                    if (res.error) {
+                        console.log(res.error);
+                    } else {
+                        console.log(">>>>>>>>>>>> ", res.notifications);
+                        setNotifications(res.notifications);
+
+                        let counter = 0;
+
+                        res.notifications.forEach((notification) => {
+                            if (!notification.seen) {
+                                counter++;
+                            }
+                        });
+
+                        setNewNotificationsCounter(counter);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, [email]);
 
     function logOut() {
         setShowSearchField(false);
@@ -87,7 +123,7 @@ const Toolbar = () => {
                 e.target.className !== "notifications-icon" ||
                 e.target.localName === "html"
             ) {
-                // console.log(e.target.className);
+                console.log(e.target.className);
                 setShowNotifications(false);
             }
         }
@@ -99,21 +135,37 @@ const Toolbar = () => {
         }
     }
 
-    function handleNotifications(e) {
-        console.log(e.target.className);
-
-        if (getShowNotifications) {
-            setShowNotifications(false);
-        } else {
-            setShowNotifications(true);
-            dispatch(setNewNotificationsCounter(0));
-        }
-    }
-
     function search() {
         if (searchInputRef.current) {
             setPrevSearchInputField(searchInputRef.current.value);
         }
+    }
+
+    function setNotificationAsSeen(notification, index) {
+        http.post(
+            {
+                _id: notification._id,
+            },
+            "notification-seen"
+        )
+            .then((res) => {
+                if (res.error) {
+                    console.log(res.error);
+                } else {
+                    const notifications = [...getNotifications];
+
+                    notifications[index].seen = res.notification.seen;
+
+                    setNewNotificationsCounter(getNewNotificationsCounter - 1);
+
+                    console.log("!!!!!! ", notifications);
+
+                    setNotifications(notifications);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     const favoritesLink = () => (
@@ -125,7 +177,7 @@ const Toolbar = () => {
         >
             <MdFavorite />
             {favoritesCounter > 0 && (
-                <div className="position-absolute d-flex align-items-center justify-content-center popupBubble">
+                <div className="position-absolute d-flex align-items-center justify-content-center bubbleFavorites">
                     {favoritesCounter}
                 </div>
             )}
@@ -230,28 +282,70 @@ const Toolbar = () => {
                         </div>
                         <div
                             className="notifications-icon"
-                            onClick={handleNotifications}
-                            title="Show notifications"
+                            style={{
+                                color: `${
+                                    getNewNotificationsCounter > 0
+                                        ? "white"
+                                        : "#4c84ab"
+                                }`,
+                            }}
+                            onClick={() => {
+                                setShowNotifications(!getShowNotifications);
+                            }}
                         >
                             <MdNotifications />
+                            {getNewNotificationsCounter > 0 && (
+                                <div className="position-absolute d-flex align-items-center justify-content-center bubbleNotifications">
+                                    {getNewNotificationsCounter}
+                                </div>
+                            )}
                             {getShowNotifications && (
                                 <div className="notifications-dropdown">
-                                    <h6 className="text-light text-center mb-4">
+                                    <h6 className="text-light text-center mb-3">
                                         Notifications
                                     </h6>
-                                    <div className="notifications-dropdown-item">
-                                        <span>
-                                            asfasf asfasf asfasf asfasf asfasf
-                                            asfasf vasfasf asfasf asfasf
-                                        </span>
-                                        <div className="new-notification float-end" />
-                                    </div>
-                                    <div className="notifications-dropdown-item">
-                                        asfasf
-                                    </div>
-                                    <div className="notifications-dropdown-item">
-                                        asfasf
-                                    </div>
+                                    {getNotifications &&
+                                    getNotifications.length > 0 ? (
+                                        getNotifications.map(
+                                            (notification, index) => {
+                                                return (
+                                                    <Link
+                                                        to={`thread/${notification.threadId}/1`}
+                                                        key={index}
+                                                        title="Go to thread"
+                                                        onClick={() =>
+                                                            !notification.seen
+                                                                ? setNotificationAsSeen(
+                                                                      notification,
+                                                                      index
+                                                                  )
+                                                                : {}
+                                                        }
+                                                    >
+                                                        <div className="notifications-dropdown-item">
+                                                            <span>
+                                                                User{" "}
+                                                                <b>
+                                                                    {
+                                                                        notification.postBy
+                                                                    }
+                                                                </b>{" "}
+                                                                has replied to
+                                                                your thread.
+                                                            </span>
+                                                            {!notification.seen && (
+                                                                <div className="new-notification float-end" />
+                                                            )}
+                                                        </div>
+                                                    </Link>
+                                                );
+                                            }
+                                        )
+                                    ) : (
+                                        <p className="text-center text-sec">
+                                            No new notifications
+                                        </p>
+                                    )}
                                 </div>
                             )}
                         </div>

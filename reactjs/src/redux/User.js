@@ -12,7 +12,6 @@ export const userSlice = createSlice({
             postCount: 0,
             showEmail: false,
             favoritesCounter: 0,
-            newNotificationsCounter: 0,
         },
     },
     reducers: {
@@ -36,10 +35,6 @@ export const userSlice = createSlice({
             state.value.favoritesCounter = action.payload;
         },
 
-        setNewNotificationsCounter: (state, action) => {
-            state.value.newNotificationsCounter = action.payload;
-        },
-
         resetUserState: (state, action) => {
             state.value.email = userSlice.getInitialState().value.email;
             state.value._id = userSlice.getInitialState().value._id;
@@ -54,7 +49,6 @@ export const {
     setShowEmail,
     setFavoritesCounter,
     resetUserState,
-    setNewNotificationsCounter,
 } = userSlice.actions;
 
 export default userSlice.reducer;

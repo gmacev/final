@@ -63,7 +63,7 @@ const PostInThread = ({ post, index }) => {
                     index === 0 && "first-post-in-thread"
                 }`}
             >
-                <p className="small text-sec float-end">
+                <p className="small text-sec ms-5 float-end">
                     {new Date(post.createdTimeStamp).toLocaleString([], {
                         year: "numeric",
                         month: "2-digit",
