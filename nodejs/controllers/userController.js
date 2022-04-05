@@ -2,8 +2,6 @@ const bcrypt = require("bcrypt");
 const models = {
     userModel: require("../models/userSchema"),
 };
-//const socket = require("../app");
-//socket.ioObject.emit("auction", response)
 
 module.exports = {
     registerUser: async (req, res) => {

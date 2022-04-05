@@ -39,8 +39,6 @@ module.exports = {
                 { new: true }
             );
 
-            console.log(notification);
-
             return res.send({
                 error: false,
                 message: "Notification set to seen",

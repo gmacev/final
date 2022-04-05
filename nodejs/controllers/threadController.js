@@ -73,8 +73,6 @@ module.exports = {
                 .sort({ _id: -1 });
         } else total = await models["threadModel"].count();
 
-        console.log(threads, filterQuery, owner, total);
-
         return res.send({ error: false, threads: threads, total: total });
     },
 

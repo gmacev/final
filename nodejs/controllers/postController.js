@@ -93,8 +93,6 @@ module.exports = {
                 .sort({ _id: -1 });
         } else total = await models["postModel"].count();
 
-        console.log(posts, filterQuery, owner, total);
-
         return res.send({ error: false, posts: posts, total: total });
     },
 
