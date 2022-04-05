@@ -5,7 +5,7 @@ import "./style.css";
 import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 import DisplayTextEditorOutput from "../richTextEditor/DisplayTextEditorOutput";
 
-const PostInList = ({ post }) => {
+const PostInList = ({ post, key }) => {
     const [getShowPost, setShowPost] = useState(false);
 
     return (

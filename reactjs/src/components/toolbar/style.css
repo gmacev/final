@@ -11,6 +11,11 @@
     display: flex;
     justify-content: space-between;
 }
+
+.toolbar-padding-fix {
+    padding-right: 50px;
+}
+
 .toolbar p {
     user-select: none;
     white-space: nowrap;
@@ -18,7 +23,8 @@
     color: white;
 }
 
-.toolbar div:not(.search-item, .popupBubble, .notifications),
+.toolbar
+    div:not(.search-item, .popupBubble, .notifications-icon, .notifications-dropdown, .notifications-dropdown-item, .new-notification),
 .toolbar a {
     cursor: pointer;
     color: white;
@@ -33,9 +39,9 @@
     justify-content: center;
 }
 
-.notifications {
+.notifications-icon {
     padding: 10px;
-    text-align: center;
+
     color: #4c84ab;
     display: flex;
     cursor: pointer;
@@ -44,17 +50,49 @@
     height: fit-content;
 }
 
-.notifications svg {
-    font-size: 25px;
+.notifications-icon svg {
+    font-size: 30px;
+}
+
+.notifications-dropdown {
+    position: absolute;
+    top: 80px;
+    right: 0;
+    width: 400px;
+    background-color: rgba(0, 36, 60, 0.85);
+    border: 1px solid #004877;
+    backdrop-filter: blur(4px);
+    color: white;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.notifications-dropdown-item {
+    background-color: rgba(0, 36, 60, 0.85);
+    border: 1px solid #004877;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.new-notification {
+    min-width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: orchid;
 }
 
 .popupBubble {
     bottom: 52px;
-    right: 0;
+    right: 7px;
     width: 22px;
     height: 22px;
     border-radius: 50%;
     background-color: #6558ef;
+    color: white;
     font-size: 14px;
 }
 
@@ -62,14 +100,20 @@
     padding: unset !important;
 }
 
-.toolbar div:hover:not(.notifications) svg,
-.toolbar a:hover:not(.notifications) svg {
+.toolbar
+    div:hover:not(.notifications-icon, .notifications-dropdown, .notifications-dropdown-item, .new-notification)
+    svg,
+.toolbar
+    a:hover:not(.notifications-icon, .notifications-dropdown, .notifications-dropdown-item, .new-notification)
+    svg {
     transform: scale(1.2);
     color: #5fc4ff;
 }
 
 .toolbar a svg,
-.toolbar div:not(.notifications) svg {
+.toolbar
+    div:not(.notifications-icon, .notifications-dropdown, .notifications-dropdown-item, .new-notification)
+    svg {
     font-size: 40px;
     transition: all 150ms ease-in;
 }
@@ -122,11 +166,29 @@
     .toolbar {
         padding-left: 20px;
     }
+    .toolbar-padding-fix {
+        padding-right: 20px;
+    }
 }
 
 @media only screen and (max-width: 700px) {
     .toolbar {
         padding-left: 5px;
+    }
+
+    .toolbar
+        div:not(.search-item, .popupBubble, .notifications-icon, .notifications-dropdown, .notifications-dropdown-item, .new-notification),
+    .toolbar a {
+        min-width: 75px;
+        height: 80px;
+    }
+
+    .toolbar p {
+        font-size: 14px;
+    }
+
+    .toolbar-padding-fix {
+        padding-right: 5px;
     }
 }
 
@@ -146,8 +208,12 @@
         box-shadow: rgb(12 22 44 / 70%) 12px 1px 25px -12px;
     }
 
+    .toolbar-padding-fix {
+        padding-right: unset;
+    }
+
     .toolbar
-        div:not(.search-item, .search-inputs, .popupBubble, .notifications),
+        div:not(.search-item, .search-inputs, .popupBubble, .notifications-icon, .notifications-dropdown, .notifications-dropdown-item, .new-notification),
     .toolbar a {
         width: 100%;
         height: 100%;
@@ -157,13 +223,14 @@
     }
 
     .popupBubble {
-        bottom: 90px;
+        bottom: 77px;
         width: 20px;
         height: 20px;
+        right: 0;
         font-size: 12px;
     }
 
-    .notifications {
+    .notifications-icon {
         justify-content: center;
     }
 
@@ -171,8 +238,9 @@
         border-bottom: unset;
     }
 
-    .toolbar svg {
-        font-size: 30px;
+    .toolbar svg,
+    .toolbar a svg {
+        font-size: 35px;
     }
 
     .toolbar p {
@@ -216,8 +284,9 @@
         margin-left: 50px;
     }
 
-    .toolbar svg {
-        font-size: 25px;
+    .toolbar svg,
+    .toolbar a svg {
+        font-size: 30px;
     }
 
     .toolbar p {

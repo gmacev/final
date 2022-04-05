@@ -236,6 +236,7 @@ const SingleThread = () => {
                             <PostInThread
                                 post={post}
                                 key={index}
+                                index={index}
                             />
                         ))}
                         {user.email ? (

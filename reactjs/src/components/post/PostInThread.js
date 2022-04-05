@@ -3,7 +3,7 @@ import DisplayTextEditorOutput from "../richTextEditor/DisplayTextEditorOutput";
 import http from "../../plugins/http";
 import { Link } from "react-router-dom";
 
-const PostInThread = ({ post }) => {
+const PostInThread = ({ post, index }) => {
     let [getUser, setUser] = useState({});
 
     useEffect(() => {
@@ -58,7 +58,11 @@ const PostInThread = ({ post }) => {
                     <p className="post-owner-email">{post.owner}</p>
                 )}
             </div>
-            <div className="box post flex6">
+            <div
+                className={`box post flex6 ${
+                    index === 0 && "first-post-in-thread"
+                }`}
+            >
                 <p className="small text-sec float-end">
                     {new Date(post.createdTimeStamp).toLocaleString([], {
                         year: "numeric",
