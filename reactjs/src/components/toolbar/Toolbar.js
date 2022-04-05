@@ -52,7 +52,7 @@ const Toolbar = () => {
         if (email.length === 0 && localStorage.getItem("email")) {
             return setRecheck(true);
         } else if (getRecheck && email.length > 0) {
-            http.get(`notifications/5/${email}`)
+            http.get(`notifications/10/${email}`)
                 .then((res) => {
                     if (res.error) {
                         console.log(res.error);
@@ -186,7 +186,7 @@ const Toolbar = () => {
 
     return (
         <>
-            <div className={`toolbar ${!email && "toolbar-padding-fix"}`}>
+            <div className="toolbar">
                 <Link
                     to={"/"}
                     className={`${pathname === "/" && "toolbar-active-item"}`}
@@ -203,32 +203,32 @@ const Toolbar = () => {
                     <HiUsers />
                     <p>Users</p>
                 </Link>
-                <div
-                    className="search-nav"
-                    onClick={handleSearchField}
-                >
-                    <HiSearch />
-                    <p>Search</p>
-                    <div className="search-item">
-                        {getShowSearchField && (
-                            <div className="search-inputs d-flex flex-row vw-100">
-                                <input
-                                    autoFocus
-                                    type="text"
-                                    className="search-input"
-                                    ref={searchInputRef}
-                                    defaultValue={getPrevSearchInputField}
-                                />
-                                <Button
-                                    onClick={search}
-                                    className="d-inline-block"
-                                >
-                                    Search
-                                </Button>
-                            </div>
-                        )}
-                    </div>
-                </div>
+                {/*<div*/}
+                {/*    className="search-nav"*/}
+                {/*    onClick={handleSearchField}*/}
+                {/*>*/}
+                {/*    <HiSearch />*/}
+                {/*    <p>Search</p>*/}
+                {/*    <div className="search-item">*/}
+                {/*        {getShowSearchField && (*/}
+                {/*            <div className="search-inputs d-flex flex-row vw-100">*/}
+                {/*                <input*/}
+                {/*                    autoFocus*/}
+                {/*                    type="text"*/}
+                {/*                    className="search-input"*/}
+                {/*                    ref={searchInputRef}*/}
+                {/*                    defaultValue={getPrevSearchInputField}*/}
+                {/*                />*/}
+                {/*                <Button*/}
+                {/*                    onClick={search}*/}
+                {/*                    className="d-inline-block"*/}
+                {/*                >*/}
+                {/*                    Search*/}
+                {/*                </Button>*/}
+                {/*            </div>*/}
+                {/*        )}*/}
+                {/*    </div>*/}
+                {/*</div>*/}
                 {!email ? (
                     <>
                         {favoritesLink()}

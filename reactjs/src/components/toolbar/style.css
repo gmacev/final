@@ -7,9 +7,8 @@
     right: 0;
     top: 0;
     z-index: 1;
-    padding-left: 50px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 .toolbar-padding-fix {
@@ -177,20 +176,7 @@
 .search-inputs {
 }
 
-@media only screen and (max-width: 800px) {
-    .toolbar {
-        padding-left: 20px;
-    }
-    .toolbar-padding-fix {
-        padding-right: 20px;
-    }
-}
-
 @media only screen and (max-width: 700px) {
-    .toolbar {
-        padding-left: 5px;
-    }
-
     .toolbar
         div:not(.search-item, .bubbleFavorites, .bubbleNotifications, .notifications-icon, .notifications-dropdown, .notifications-dropdown-item, .new-notification),
     .toolbar a {
@@ -217,8 +203,6 @@
         z-index: 1;
         top: 0;
         left: 0;
-
-        padding-left: unset;
 
         box-shadow: rgb(12 22 44 / 70%) 12px 1px 25px -12px;
     }
