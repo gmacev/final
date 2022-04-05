@@ -88,13 +88,18 @@ module.exports = {
             filterQuery = { threadId: threadId };
         }
 
-        if (count === 0) {
-            posts = await models["postModel"].find(
-                { threadId: threadId },
-                {},
-                { skip: limit * page, limit: limit }
+        posts = await models["postModel"].find(
+            { threadId: threadId },
+            {},
+            { skip: limit * page, limit: limit }
+        );
+
+        total = await models["postModel"].count(filterQuery);
+
+        /*if (count === 0) {
+
             );
-        } else total = await models["postModel"].count(filterQuery);
+        } else total = await models["postModel"].count(filterQuery);*/
 
         return res.send({ error: false, posts: posts, total: total });
     },
