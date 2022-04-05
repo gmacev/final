@@ -58,13 +58,12 @@ const SingleThread = () => {
         return () => {
             mountedRef.current = false;
         };
-    }, []);
+    }, [activePage]);
 
     const handlePageChange = (newActivePage) => {
         activePage = newActivePage;
         setActivePage(newActivePage);
-        goToPage(`/thread/${id}/1`);
-        loadPosts();
+        goToPage(`/thread/${id}/${newActivePage}`);
     };
 
     function loadPosts(totalCount) {
@@ -75,7 +74,7 @@ const SingleThread = () => {
                         console.log(res.error);
                     } else {
                         setOpacity(1);
-                        setPosts(res.posts.reverse());
+                        setPosts(res.posts);
                     }
                 })
                 .catch((err) => {
@@ -147,7 +146,7 @@ const SingleThread = () => {
         setResponse("");
 
         if (
-            getOutPut <= 0 ||
+            getOutPut.length <= 0 ||
             getOutPut ===
                 [
                     {
@@ -175,7 +174,10 @@ const SingleThread = () => {
                 } else {
                     setResponse(res.message);
                     setPosts([...getPosts, res.post]);
-                    setOutPut([...initialOutput]);
+                    getOutPut = initialOutput;
+                    setOutPut(getOutPut);
+                    console.log(getOutPut);
+                    setInRequest(false);
                 }
             })
             .catch((err) => {

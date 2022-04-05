@@ -189,7 +189,9 @@ const Toolbar = () => {
             <div className="toolbar">
                 <Link
                     to={"/"}
-                    className={`${pathname === "/" && "toolbar-active-item"}`}
+                    className={`${
+                        pathname.includes("/threads/") && "toolbar-active-item"
+                    }`}
                 >
                     <HiHome />
                     <p>Index</p>

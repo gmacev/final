@@ -24,8 +24,6 @@ const http = {
             body: JSON.stringify(data),
         };
 
-        console.log(process.env.REACT_APP_REQUEST_SERVER + "/" + url);
-
         const res = await fetch(
             process.env.REACT_APP_REQUEST_SERVER + "/" + url,
             options
