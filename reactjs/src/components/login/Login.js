@@ -1,21 +1,23 @@
 import React, { useRef, useState, useContext, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import http from "../../plugins/http";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser, setUserName } from "../../redux/User";
 import Button from "../button/Button";
 import { Form } from "react-bootstrap";
 
 const Login = () => {
-    const emailRef = useRef();
-    const passwordRef = useRef();
-    const dispatch = useDispatch();
+    const { favoritesCounter } = useSelector((state) => state.user.value);
 
     const [getResponse, setResponse] = useState("");
     const [getInRequest, setInRequest] = useState(false);
     let [getOpacity, setOpacity] = useState(0);
     let [getUserId, setUserId] = useState("");
     const [getRememberLogin, setRememberLogin] = useState(true);
+
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
     const { state } = useLocation();
@@ -61,11 +63,13 @@ const Login = () => {
                     setResponse(res.message);
                     getUserId = res.user._id;
                     setUserId(res.user._id);
-                    dispatch(setUser(res.user));
-                    dispatch(setUserName(res.user.username));
+                    const tempUser = res.user;
+                    tempUser.favoritesCounter = favoritesCounter;
+                    dispatch(setUser(tempUser));
+                    dispatch(setUserName(tempUser.username));
 
                     if (getRememberLogin) {
-                        localStorage.setItem("email", res.user.email);
+                        localStorage.setItem("email", tempUser.email);
                     }
 
                     navigate(`/profile/${getUserId}`);

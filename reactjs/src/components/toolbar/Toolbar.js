@@ -9,7 +9,7 @@ import {
     HiSearch,
     HiUserCircle,
 } from "react-icons/hi";
-import { MdCreateNewFolder, MdFavorite } from "react-icons/md";
+import { MdCreateNewFolder, MdFavorite, MdNotifications } from "react-icons/md";
 
 import { useDispatch, useSelector } from "react-redux";
 import { resetUserState } from "../../redux/User";
@@ -17,11 +17,15 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../button/Button";
 
 const Toolbar = () => {
-    const { email, _id } = useSelector((state) => state.user.value);
+    const { email, _id, favoritesCounter } = useSelector(
+        (state) => state.user.value
+    );
 
     const [getShowSearchField, setShowSearchField] = useState(false);
     const [getPrevSearchInputField, setPrevSearchInputField] = useState("");
+
     const searchInputRef = useRef();
+    const mountedRef = useRef(true);
 
     const dispatch = useDispatch();
     const { pathname } = useLocation();
@@ -33,6 +37,7 @@ const Toolbar = () => {
 
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
+            mountedRef.current = false;
         };
     }, []);
 
@@ -85,6 +90,23 @@ const Toolbar = () => {
         }
     }
 
+    const favoritesLink = () => (
+        <Link
+            to={"/favorite-threads/1"}
+            className={`position-relative ${
+                pathname.includes("/favorite-threads/") && "toolbar-active-item"
+            }`}
+        >
+            <MdFavorite />
+            {favoritesCounter > 0 && (
+                <div className="position-absolute d-flex align-items-center justify-content-center popupBubble">
+                    {favoritesCounter}
+                </div>
+            )}
+            <p>Favorites</p>
+        </Link>
+    );
+
     return (
         <div className="toolbar">
             <Link
@@ -131,16 +153,7 @@ const Toolbar = () => {
             </div>
             {!email ? (
                 <>
-                    <Link
-                        to={"/favorite-threads/1"}
-                        className={`${
-                            pathname.includes("/favorite-threads/") &&
-                            "toolbar-active-item"
-                        }`}
-                    >
-                        <MdFavorite />
-                        <p>Favorites</p>
-                    </Link>
+                    {favoritesLink()}
                     <Link
                         to={"/register"}
                         className={`${
@@ -181,22 +194,16 @@ const Toolbar = () => {
                         <HiUserCircle />
                         <p>Profile</p>
                     </Link>
-                    <Link
-                        to={"/favorite-threads/1"}
-                        className={`${
-                            pathname.includes("/favorite-threads/") &&
-                            "toolbar-active-item"
-                        }`}
-                    >
-                        <MdFavorite />
-                        <p>Favorites</p>
-                    </Link>
+                    {favoritesLink()}
                     <div onClick={logOut}>
                         <HiLogout />
                         <p>Logout</p>
                     </div>
                 </>
             )}
+            <div className="notifications">
+                <MdNotifications />
+            </div>
         </div>
     );
 };

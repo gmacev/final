@@ -59,6 +59,15 @@ const PostInThread = ({ post }) => {
                 )}
             </div>
             <div className="box post flex6">
+                <p className="small text-sec float-end">
+                    {new Date(post.createdTimeStamp).toLocaleString([], {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    })}
+                </p>
                 <DisplayTextEditorOutput
                     getValue={post.post}
                     randomNum={79}

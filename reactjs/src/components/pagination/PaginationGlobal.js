@@ -5,20 +5,26 @@ export const itemsPerPage = 10;
 
 const PaginationGlobal = ({ activePage, handlePageChange, totalCount }) => {
     return (
-        <div className="d-flex justify-content-center">
-            <Pagination
-                activePage={activePage}
-                itemsCountPerPage={itemsPerPage}
-                totalItemsCount={totalCount}
-                pageRangeDisplayed={5}
-                onChange={handlePageChange}
-                itemClass="page-item"
-                hideFirstLastPages={false}
-                nextPageText="Next >"
-                prevPageText="< Previous"
-                hideDisabled={true}
-            />
-        </div>
+        <>
+            {totalCount > itemsPerPage ? (
+                <div className="d-flex justify-content-center">
+                    <Pagination
+                        activePage={activePage}
+                        itemsCountPerPage={itemsPerPage}
+                        totalItemsCount={totalCount}
+                        pageRangeDisplayed={5}
+                        onChange={handlePageChange}
+                        itemClass="page-item"
+                        hideFirstLastPages={false}
+                        nextPageText="Next >"
+                        prevPageText="< Previous"
+                        hideDisabled={true}
+                    />
+                </div>
+            ) : (
+                <></>
+            )}
+        </>
     );
 };
 

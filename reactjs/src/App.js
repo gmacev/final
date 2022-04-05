@@ -15,7 +15,7 @@ import SingleThreadPage from "./pages/SingleThreadPage";
 import io from "socket.io-client";
 import { useEffect } from "react";
 import http from "./plugins/http";
-import { setUser, setUserName } from "./redux/User";
+import { setUser, setUserName, setFavoritesCounter } from "./redux/User";
 import { useDispatch } from "react-redux";
 const socket = io.connect(process.env.REACT_APP_SOCKETS_SERVER);
 
@@ -36,12 +36,24 @@ function App() {
                     } else {
                         dispatch(setUser(res.user));
                         dispatch(setUserName(res.user.username));
+                        setFavoritesCount();
                         console.log(res.user);
                     }
                 })
                 .catch((err) => {
                     console.log(err);
                 });
+        } else setFavoritesCount();
+
+        function setFavoritesCount() {
+            if (localStorage.getItem("favorite-threads")) {
+                dispatch(
+                    setFavoritesCounter(
+                        JSON.parse(localStorage.getItem("favorite-threads"))
+                            .length
+                    )
+                );
+            }
         }
     }, []);
 

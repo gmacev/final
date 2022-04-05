@@ -117,6 +117,7 @@
     .thread-in-list-title-wrapper {
         gap: 0.3rem;
         justify-content: center;
+        margin-bottom: 0.5rem;
         flex-wrap: wrap;
         width: 100%;
         text-align: center;

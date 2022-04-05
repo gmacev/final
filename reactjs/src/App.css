@@ -128,6 +128,10 @@ p {
     color: #006dff !important;
 }
 
+.text-sec {
+    color: #5a92b8 !important;
+}
+
 .flex1 {
     flex: 1;
 }

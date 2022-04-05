@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { setFavoritesCounter } from "../../redux/User";
+import { useDispatch } from "react-redux";
 
 const ThreadInList = ({ thread }) => {
     const [getIsInFavorites, setIsInFavorites] = useState(false);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         isThreadInFavorites();
@@ -18,7 +22,11 @@ const ThreadInList = ({ thread }) => {
                     localStorage.getItem("favorite-threads")
                 );
             }
+
             favoriteThreads.unshift(thread);
+
+            dispatch(setFavoritesCounter(favoriteThreads.length));
+
             localStorage.setItem(
                 "favorite-threads",
                 JSON.stringify(favoriteThreads)
@@ -28,9 +36,13 @@ const ThreadInList = ({ thread }) => {
             favoriteThreads = JSON.parse(
                 localStorage.getItem("favorite-threads")
             );
+
             favoriteThreads = favoriteThreads.filter(
                 (x) => x._id !== thread._id
             );
+
+            dispatch(setFavoritesCounter(favoriteThreads.length));
+
             localStorage.setItem(
                 "favorite-threads",
                 JSON.stringify(favoriteThreads)

@@ -5,9 +5,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import PostInThread from "../post/PostInThread";
 import TextEditor from "../richTextEditor/TextEditor";
 import Button from "../button/Button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import "./style.css";
+import { setFavoritesCounter } from "../../redux/User";
 
 const initialOutput = [
     {
@@ -31,6 +32,8 @@ const SingleThread = () => {
     const mountedRef = useRef(true);
 
     const { id } = useParams();
+
+    const dispatch = useDispatch();
 
     const goToPage = useNavigate();
 
@@ -99,7 +102,11 @@ const SingleThread = () => {
                     localStorage.getItem("favorite-threads")
                 );
             }
+
             favoriteThreads.unshift(getThread);
+
+            dispatch(setFavoritesCounter(favoriteThreads.length));
+
             localStorage.setItem(
                 "favorite-threads",
                 JSON.stringify(favoriteThreads)
@@ -109,9 +116,13 @@ const SingleThread = () => {
             favoriteThreads = JSON.parse(
                 localStorage.getItem("favorite-threads")
             );
+
             favoriteThreads = favoriteThreads.filter(
                 (x) => x._id !== getThread._id
             );
+
+            dispatch(setFavoritesCounter(favoriteThreads.length));
+
             localStorage.setItem(
                 "favorite-threads",
                 JSON.stringify(favoriteThreads)
@@ -193,10 +204,21 @@ const SingleThread = () => {
                 {getPosts && getPosts.length > 0 && (
                     <>
                         <div className="d-flex justify-content-between">
-                            <div className="text-center">
+                            <div>
                                 <h2 className="thread-title">
                                     {getThread.title}
                                 </h2>
+                                <p className="small text-sec">
+                                    {new Date(
+                                        getThread.createdTimeStamp
+                                    ).toLocaleString([], {
+                                        year: "numeric",
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                    })}
+                                </p>
                             </div>
                             <div
                                 onClick={handleFavorites}
@@ -240,16 +262,16 @@ const SingleThread = () => {
                                 )}
                             </div>
                         ) : (
-                            <h6 className="text-center m-0 mt-4">
+                            <p className="text-center text-sec m-0 mt-4">
                                 Please{" "}
                                 <Link
                                     to={"/login"}
-                                    className="login-link"
+                                    className="login-link text-sec"
                                 >
                                     login
                                 </Link>{" "}
                                 to reply
-                            </h6>
+                            </p>
                         )}
                         <PaginationGlobal
                             activePage={activePage}
