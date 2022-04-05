@@ -187,6 +187,7 @@ const Toolbar = () => {
     return (
         <>
             <div className="toolbar">
+                <div className="dummy-div" />
                 <Link
                     to={"/"}
                     className={`${
@@ -253,6 +254,7 @@ const Toolbar = () => {
                             <HiLogin />
                             <p>Login</p>
                         </Link>
+                        <div className="dummy-div" />
                     </>
                 ) : (
                     <>
