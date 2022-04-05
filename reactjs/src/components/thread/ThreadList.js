@@ -52,7 +52,6 @@ const ThreadList = ({ favorites }) => {
                 .then((res) => {
                     setOpacity(1);
                     setThreads(res.threads);
-                    console.log(res.threads);
                     setAllThreads(res.threads);
                 })
                 .catch((err) => {

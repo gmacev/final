@@ -28,7 +28,6 @@ const CreateThread = () => {
     useEffect(() => {
         const timeOut = setTimeout(() => {
             setOpacity(1);
-            console.log(user);
         }, 100);
 
         return () => {

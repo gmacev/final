@@ -14,7 +14,6 @@ const PostInThread = ({ post, index }) => {
                 } else {
                     getUser = res.user;
                     setUser(res.user);
-                    console.log(getUser);
                 }
             })
             .catch((err) => {

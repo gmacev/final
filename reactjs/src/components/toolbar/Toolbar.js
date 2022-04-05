@@ -57,7 +57,6 @@ const Toolbar = () => {
                     if (res.error) {
                         console.log(res.error);
                     } else {
-                        console.log(">>>>>>>>>>>> ", res.notifications);
                         setNotifications(res.notifications);
 
                         let counter = 0;
@@ -159,8 +158,6 @@ const Toolbar = () => {
                     notifications[index].seen = res.notification.seen;
 
                     setNewNotificationsCounter(getNewNotificationsCounter - 1);
-
-                    console.log("!!!!!! ", notifications);
 
                     setNotifications(notifications);
                 }

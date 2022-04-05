@@ -3,8 +3,6 @@ import "./style.css";
 import { Link } from "react-router-dom";
 
 const User = ({ user }) => {
-    console.log(user.username, user.avatar);
-
     return (
         <div className="box2 user-card-in-list">
             <div

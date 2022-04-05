@@ -12,12 +12,10 @@ import ThreadListPage from "./pages/ThreadListPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import SingleThreadPage from "./pages/SingleThreadPage";
 
-import io from "socket.io-client";
 import { useEffect } from "react";
 import http from "./plugins/http";
 import { setUser, setUserName, setFavoritesCounter } from "./redux/User";
 import { useDispatch } from "react-redux";
-const socket = io.connect(process.env.REACT_APP_SOCKETS_SERVER);
 
 function App() {
     const dispatch = useDispatch();

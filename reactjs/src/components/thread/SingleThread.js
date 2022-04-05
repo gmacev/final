@@ -45,7 +45,6 @@ const SingleThread = () => {
                 } else {
                     getThread = res.thread;
                     setThread(res.thread);
-                    console.log(res.thread);
                     isThreadInFavorites();
                 }
             })
@@ -139,8 +138,6 @@ const SingleThread = () => {
 
             const found = favoriteThreads.find((x) => x._id === getThread._id);
 
-            console.log(found, getThread._id);
-
             if (found) setIsInFavorites(true);
         } else setIsInFavorites(false);
     }
@@ -148,14 +145,6 @@ const SingleThread = () => {
     async function createPost() {
         setInRequest(true);
         setResponse("");
-
-        console.log(getOutPut);
-        console.log([
-            {
-                type: "paragraph",
-                children: [{ text: "" }],
-            },
-        ]);
 
         if (
             getOutPut <= 0 ||
