@@ -70,7 +70,7 @@ const ThreadList = ({ favorites }) => {
 
     return (
         <div
-            className="main"
+            className="main box-wrapper"
             style={{ opacity: `${getOpacity}` }}
         >
             <div className="box">

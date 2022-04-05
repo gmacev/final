@@ -103,9 +103,13 @@ a {
 }
 
 .login,
-.register,
-.create-thread {
+.register {
     width: auto;
+}
+
+.box-wrapper,
+.create-thread {
+    width: calc(100% - 30px);
 }
 
 p {
@@ -169,26 +173,36 @@ p {
 }
 
 @media only screen and (max-width: 800px) {
-    .main,
-    .login,
-    .register,
-    .create-thread {
-        margin: 130px 0 15px 0;
-        width: calc(100% - 50px) !important;
-    }
 }
 
 @media only screen and (max-width: 600px) {
     .login,
     .register,
-    .create-thread {
+    .create-thread,
+    .box-wrapper {
         min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
+    .main,
+    .login,
+    .register,
+    .create-thread,
+    .box-wrapper {
+        margin: 130px 0 15px 0;
+        width: calc(100% - 50px) !important;
+    }
+
     input {
+        width: 100%;
+    }
+
+    .register-box,
+    .login-box,
+    .create-thread-box,
+    .users-in-list-box {
         width: 100%;
     }
 
@@ -199,7 +213,8 @@ p {
     .main,
     .login,
     .register,
-    .create-thread {
+    .create-thread,
+    .box-wrapper {
         margin: 15px 0 15px 60px;
         width: calc(100% - 85px) !important;
     }
@@ -209,7 +224,8 @@ p {
     .main,
     .login,
     .register,
-    .create-thread {
+    .create-thread,
+    .box-wrapper {
         margin: 10px 0 10px 50px;
         width: calc(100% - 70px) !important;
     }
@@ -219,7 +235,9 @@ p {
     }
 
     .register-box,
-    .login-box {
+    .login-box,
+    .create-thread-box,
+    .users-in-list-box {
         padding-left: 15px;
         padding-right: 15px;
     }

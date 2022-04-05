@@ -55,10 +55,10 @@ const UsersList = () => {
 
     return (
         <div
-            className="main"
+            className="main box-wrapper"
             style={{ opacity: `${getOpacity}` }}
         >
-            <div className="box">
+            <div className="box users-in-list-box">
                 <h2 className="text-center mb-4">
                     {getUsers && getUsers.length > 0
                         ? "Registered users"
