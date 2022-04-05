@@ -192,6 +192,10 @@ p {
         width: 100%;
     }
 
+    .box {
+        padding: 25px;
+    }
+
     .main,
     .login,
     .register,
@@ -206,11 +210,17 @@ p {
     .login,
     .register,
     .create-thread {
-        margin: 15px 0 15px 50px;
-        width: calc(100% - 75px) !important;
+        margin: 10px 0 10px 50px;
+        width: calc(100% - 70px) !important;
     }
 
     .box {
-        padding: 15px;
+        padding: 15px 5px 5px 5px;
+    }
+
+    .register-box,
+    .login-box {
+        padding-left: 15px;
+        padding-right: 15px;
     }
 }

@@ -86,7 +86,7 @@ const Login = () => {
             className="main login"
             style={{ opacity: `${getOpacity}` }}
         >
-            <div className="box d-flex flex-column align-items-center">
+            <div className="box login-box d-flex flex-column align-items-center">
                 <div className="d-flex flex-column justify-content-center">
                     <h2 className="text-center">Login</h2>
                     <label

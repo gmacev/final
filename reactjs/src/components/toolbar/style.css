@@ -260,7 +260,7 @@
         right: unset;
         left: 60px;
         bottom: 0;
-        width: calc(100vw - 80px);
+        width: calc(100vw - 90px);
         max-width: 400px;
         line-break: anywhere;
     }
@@ -308,7 +308,7 @@
     }
 
     .notifications-dropdown {
-        width: calc(100vw - 70px);
+        width: calc(100vw - 80px);
         left: 50px;
     }
 
