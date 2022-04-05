@@ -90,7 +90,7 @@ module.exports = {
 
         if (count === 0) {
             posts = await models["postModel"].find(
-                filterQuery,
+                { threadId: threadId },
                 {},
                 { skip: limit * page, limit: limit }
             );
