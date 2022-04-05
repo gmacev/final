@@ -63,7 +63,6 @@ const RichEditor = ({ getValue, setValue }) => {
     function textInput(val) {
         if (!getEditorEnabled) setEditorEnabled(true);
         setValue(val);
-        console.log(val);
     }
 
     return (

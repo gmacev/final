@@ -30,12 +30,11 @@ function App() {
             )
                 .then((res) => {
                     if (res.error) {
-                        console.log(res.message);
+                        console.log(res.error);
                     } else {
                         dispatch(setUser(res.user));
                         dispatch(setUserName(res.user.username));
                         setFavoritesCount();
-                        console.log(res.user);
                     }
                 })
                 .catch((err) => {
