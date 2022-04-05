@@ -1,3 +1,4 @@
+const { log } = require("nodemon/lib/utils");
 const models = {
     postModel: require("../models/postSchema"),
     threadModel: require("../models/threadSchema"),
@@ -88,10 +89,12 @@ module.exports = {
         }
 
         if (count === 0) {
-            posts = await models["postModel"]
-                .find(filterQuery, {}, { skip: limit * page, limit: limit })
-                .sort({ _id: -1 });
-        } else total = await models["postModel"].count();
+            posts = await models["postModel"].find(
+                filterQuery,
+                {},
+                { skip: limit * page, limit: limit }
+            );
+        } else total = await models["postModel"].count(filterQuery);
 
         return res.send({ error: false, posts: posts, total: total });
     },
