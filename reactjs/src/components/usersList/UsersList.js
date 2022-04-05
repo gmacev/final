@@ -22,13 +22,12 @@ const UsersList = () => {
         return () => {
             mountedRef.current = false;
         };
-    }, []);
+    }, [getUsers]);
 
     const handlePageChange = (newActivePage) => {
         activePage = newActivePage;
         setActivePage(newActivePage);
         goToPage(`/users/${newActivePage}`);
-        loadUsers(false);
     };
 
     function loadUsers(totalCount) {

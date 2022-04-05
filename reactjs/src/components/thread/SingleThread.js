@@ -53,17 +53,18 @@ const SingleThread = () => {
             });
 
         loadPosts(false);
-        //loadPosts();
+        loadPosts(true);
 
         return () => {
             mountedRef.current = false;
         };
-    }, [activePage]);
+    }, []);
 
     const handlePageChange = (newActivePage) => {
         activePage = newActivePage;
         setActivePage(newActivePage);
         goToPage(`/thread/${id}/${newActivePage}`);
+        loadPosts(false);
     };
 
     function loadPosts(totalCount) {
@@ -75,13 +76,12 @@ const SingleThread = () => {
                     } else {
                         setOpacity(1);
                         setPosts(res.posts);
-                        setTotalCount(res.total);
                     }
                 })
                 .catch((err) => {
                     console.log(err);
                 });
-        } /*else {
+        } else {
             http.get(`posts/1/${itemsPerPage}/${activePage}/0/${id}`)
                 .then((res) => {
                     setTotalCount(res.total);
@@ -89,7 +89,7 @@ const SingleThread = () => {
                 .catch((err) => {
                     console.log(err);
                 });
-        }*/
+        }
     }
 
     function handleFavorites() {
@@ -177,7 +177,6 @@ const SingleThread = () => {
                     setPosts([...getPosts, res.post]);
                     getOutPut = initialOutput;
                     setOutPut(getOutPut);
-                    console.log(getOutPut);
                     setInRequest(false);
                 }
             })

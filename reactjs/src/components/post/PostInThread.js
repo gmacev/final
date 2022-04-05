@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 const PostInThread = ({ post, index }) => {
     let [getUser, setUser] = useState({});
 
+    const randomNum = Math.floor(Math.random() * 99999);
+
     useEffect(() => {
         http.get(`user/0/${post.owner}`)
             .then((res) => {
@@ -19,64 +21,70 @@ const PostInThread = ({ post, index }) => {
             .catch((err) => {
                 console.log(err);
             });
-    }, []);
+    }, [post]);
 
     return (
-        <div className="d-flex flex-wrap gap-3 mt-4">
-            <div className="box user-info d-flex flex-column align-items-center flex1 justify-content-between">
-                <div>
-                    <img
-                        src={getUser.avatar}
-                        alt="user avatar"
-                        className="avatar-in-thread mb-3"
-                    />
-                    <Link to={`/profile/${getUser._id}`}>
-                        <h6 className="m-0 mb-3 text-center mt">
-                            {getUser.username}
-                        </h6>
-                    </Link>
-                    <p>
-                        <b>Registered:</b>{" "}
-                        {new Date(getUser.registeredTimeStamp).toLocaleString(
-                            [],
-                            {
-                                year: "numeric",
-                                month: "2-digit",
-                                day: "2-digit",
-                            }
+        <>
+            {getUser && (
+                <div className="d-flex flex-wrap gap-3 mt-4">
+                    <div className="box user-info d-flex flex-column align-items-center flex1 justify-content-between">
+                        <div>
+                            <img
+                                src={getUser.avatar}
+                                alt="user avatar"
+                                className="avatar-in-thread mb-3"
+                            />
+                            <Link to={`/profile/${getUser._id}`}>
+                                <h6 className="m-0 mb-3 text-center mt">
+                                    {getUser.username}
+                                </h6>
+                            </Link>
+                            <p>
+                                <b>Registered:</b>{" "}
+                                {new Date(
+                                    getUser.registeredTimeStamp
+                                ).toLocaleString([], {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                })}
+                            </p>
+                            <p>
+                                <b>Threads:</b> {getUser.threadCount}
+                            </p>
+                            <p>
+                                <b>Posts:</b> {getUser.postCount}
+                            </p>
+                        </div>
+                        {getUser.showEmail && (
+                            <p className="post-owner-email">{post.owner}</p>
                         )}
-                    </p>
-                    <p>
-                        <b>Threads:</b> {getUser.threadCount}
-                    </p>
-                    <p>
-                        <b>Posts:</b> {getUser.postCount}
-                    </p>
+                    </div>
+                    <div
+                        className={`box post flex6 ${
+                            index === 0 && "first-post-in-thread"
+                        }`}
+                    >
+                        <p className="small text-sec ms-5 float-end">
+                            {new Date(post.createdTimeStamp).toLocaleString(
+                                [],
+                                {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                }
+                            )}
+                        </p>
+                        <DisplayTextEditorOutput
+                            getValue={post.post}
+                            randomNum={randomNum}
+                        />
+                    </div>
                 </div>
-                {getUser.showEmail && (
-                    <p className="post-owner-email">{post.owner}</p>
-                )}
-            </div>
-            <div
-                className={`box post flex6 ${
-                    index === 0 && "first-post-in-thread"
-                }`}
-            >
-                <p className="small text-sec ms-5 float-end">
-                    {new Date(post.createdTimeStamp).toLocaleString([], {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                    })}
-                </p>
-                <DisplayTextEditorOutput
-                    getValue={post.post}
-                    randomNum={79}
-                />
-            </div>
-        </div>
+            )}
+        </>
     );
 };
 

@@ -29,9 +29,7 @@ function App() {
                 "auto-login"
             )
                 .then((res) => {
-                    if (res.error) {
-                        console.log(res.error);
-                    } else {
+                    if (!res.error) {
                         dispatch(setUser(res.user));
                         dispatch(setUserName(res.user.username));
                         setFavoritesCount();

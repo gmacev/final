@@ -43,7 +43,6 @@ const ThreadList = ({ favorites }) => {
         activePage = newActivePage;
         setActivePage(newActivePage);
         goToPage(`/threads/${newActivePage}`);
-        loadThreads(false);
     };
 
     function loadThreads(totalCount) {
