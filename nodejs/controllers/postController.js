@@ -2,6 +2,7 @@ const models = {
     postModel: require("../models/postSchema"),
     threadModel: require("../models/threadSchema"),
     userModel: require("../models/userSchema"),
+    notificationsModel: require("../models/notificationsSchema"),
 };
 
 module.exports = {
@@ -14,14 +15,11 @@ module.exports = {
             threadPost.owner = owner.toLowerCase();
             threadPost.threadId = threadId;
 
-            const threadTitle = await models["threadModel"].findOne(
-                { _id: threadId },
-                { title: 1 }
-            );
+            const thread = await models["threadModel"].findOne({
+                _id: threadId,
+            });
 
-            console.log(">>>>>>>>>>>>>>>>>>>>", threadId, threadTitle);
-
-            threadPost.threadTitle = threadTitle.title;
+            threadPost.threadTitle = thread.title;
             threadPost.post = post;
             threadPost.createdTimeStamp = Date.now();
 
@@ -32,7 +30,7 @@ module.exports = {
                 { $inc: { postCount: 1 } }
             );
 
-            await models["userModel"].findOneAndUpdate(
+            const user = await models["userModel"].findOneAndUpdate(
                 { email: owner.toLowerCase() },
                 { $inc: { postCount: 1 } }
             );
@@ -41,6 +39,16 @@ module.exports = {
                 { _id: threadId },
                 { $set: { lastPostTimeStamp: Date.now() } }
             );
+
+            if (thread.owner !== owner) {
+                const notification = new models["notificationsModel"]();
+
+                notification.owner = thread.owner;
+                notification.postBy = user.username;
+                notification.threadId = threadId;
+
+                await notification.save();
+            }
 
             return res.send({
                 error: false,
@@ -56,7 +64,12 @@ module.exports = {
     getPosts: async (req, res) => {
         let { count, limit, page, owner, threadId } = req.params;
 
-        if (!/\d/.test(count) || !/\d/.test(limit) || !/\d/.test(page))
+        if (
+            !/\d/.test(count) ||
+            !/\d/.test(limit) ||
+            !/\d/.test(page) ||
+            owner.includes("$")
+        )
             return res.send({ error: true, message: "Error" });
 
         count = Number(count);
@@ -87,6 +100,9 @@ module.exports = {
 
     getPost: async (req, res) => {
         const { _id } = req.params;
+
+        if (_id.includes("$"))
+            return res.send({ error: true, message: "Error" });
 
         const post = await models["postModel"].findOne({ _id: _id });
 

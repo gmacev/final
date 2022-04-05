@@ -124,6 +124,9 @@ module.exports = {
     getUser: async (req, res) => {
         const { _id, email } = req.params;
 
+        if (_id.includes("$") || email.includes("$"))
+            return res.send({ error: true, message: "Error" });
+
         let user = {};
 
         if (_id !== "0") {

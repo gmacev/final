@@ -24,6 +24,13 @@ const {
     getPost,
 } = require("../controllers/postController");
 
+const {
+    notificationsAllSeen,
+    notificationSeen,
+    getAllNotifications,
+    getNotification,
+} = require("../controllers/notificationsController");
+
 const userMiddleware = require("../middleware/userMiddleWare");
 const threadMiddleware = require("../middleware/threadMiddleware");
 const postMiddleWare = require("../middleware/postMiddleWare");
@@ -76,6 +83,9 @@ router.get("/thread/:_id", getThread);
 router.get("/posts/:count/:limit/:page/:owner/:threadId", getPosts);
 router.get("/post/:_id", getPost);
 
+router.get("/notifications/:limit/:owner", getAllNotifications);
+router.get("/notification/:_id", getNotification);
+
 router.post(
     "/create-thread",
     userMiddleware.validateIsUserLoggedIn,
@@ -88,6 +98,18 @@ router.post(
     userMiddleware.validateIsUserLoggedIn,
     postMiddleWare.validatePostLength,
     createPost
+);
+
+router.post(
+    "/all-notifications-seen",
+    userMiddleware.validateIsUserLoggedIn,
+    notificationsAllSeen
+);
+
+router.post(
+    "/notification-seen",
+    userMiddleware.validateIsUserLoggedIn,
+    notificationSeen
 );
 
 module.exports = router;

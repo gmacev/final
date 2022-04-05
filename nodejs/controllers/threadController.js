@@ -46,7 +46,12 @@ module.exports = {
     getThreads: async (req, res) => {
         let { count, limit, page, owner } = req.params;
 
-        if (!/\d/.test(count) || !/\d/.test(limit) || !/\d/.test(page))
+        if (
+            !/\d/.test(count) ||
+            !/\d/.test(limit) ||
+            !/\d/.test(page) ||
+            owner.includes("$")
+        )
             return res.send({ error: true, message: "Error" });
 
         count = Number(count);
@@ -75,6 +80,9 @@ module.exports = {
 
     getThread: async (req, res) => {
         const { _id } = req.params;
+
+        if (_id.includes("$"))
+            return res.send({ error: true, message: "Error" });
 
         const thread = await models["threadModel"].findOne({ _id: _id });
 
