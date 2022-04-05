@@ -97,8 +97,8 @@ const Toolbar = () => {
                 e.target.className !== null &&
                 e.target.parentNode &&
                 e.target.parentNode.className !== null &&
-                e.target.parentElement &&
-                e.target.parentElement.parentElement &&
+                e.target.parentElement !== null &&
+                e.target.parentElement.parentElement !== null &&
                 e.target.parentElement.parentElement.className !== null &&
                 e.target.parentElement.parentElement.className !==
                     "search-nav") ||
@@ -108,6 +108,8 @@ const Toolbar = () => {
                 (e.target.className !== "search-input" &&
                     e.target.className !== "search-nav" &&
                     e.target.parentNode.className !== "search-nav" &&
+                    e.target.parentElement !== null &&
+                    e.target.parentElement.parentElement !== null &&
                     e.target.parentElement.parentElement.className !==
                         "search-nav") ||
                 e.target.localName === "html"
@@ -120,10 +122,10 @@ const Toolbar = () => {
             }
 
             if (
-                e.target.className !== "notifications-icon" ||
-                e.target.localName === "html"
+                (e.target.className !== "notifications-icon" ||
+                    e.target.localName === "html") &&
+                setShowNotifications
             ) {
-                console.log(e.target.className);
                 setShowNotifications(false);
             }
         }

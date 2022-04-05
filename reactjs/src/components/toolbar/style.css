@@ -255,6 +255,16 @@
         justify-content: center;
     }
 
+    .notifications-dropdown {
+        top: unset;
+        right: unset;
+        left: 60px;
+        bottom: 0;
+        width: calc(100vw - 80px);
+        max-width: 400px;
+        line-break: anywhere;
+    }
+
     .toolbar div:last-child {
         border-bottom: unset;
     }
@@ -295,6 +305,11 @@
     .bubbleNotifications {
         width: 18px;
         height: 18px;
+    }
+
+    .notifications-dropdown {
+        width: calc(100vw - 70px);
+        left: 50px;
     }
 
     .search-item button {
